@@ -1,20 +1,20 @@
 using UnityEngine;
 
-public class Player2D : MonoBehaviour
+public class Player : MonoBehaviour
 {
     private InputSystem_Actions controls; // 自動生成されたクラス
     private Vector2 moveInput; // 入力は2Dベクトルで扱う
     [SerializeField] float moveSpeed = 5f;
     [SerializeField] float jumpForce = 5f;
 
-
+    private Rigidbody rb; // 3D用
 
     private void Awake()
     {
+        rb = GetComponent<Rigidbody>();
 
-
-
-
+        // Z回転など不要な動きを固定（横スクロール想定）
+        rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionZ;
 
         // InputActions 初期化
         controls = new InputSystem_Actions();
@@ -32,13 +32,18 @@ public class Player2D : MonoBehaviour
 
     private void Update()
     {
-        Vector3 move = new Vector3(moveInput.x,0f , moveInput.y) * moveSpeed;
-        transform.position += move * Time.deltaTime;
-
+        // 移動（XZ平面ではなくXY平面で動かすなら transform.right / up を使う）
+        Vector3 velocity = rb.linearVelocity;
+        velocity.x = moveInput.x * moveSpeed;
+        rb.linearVelocity = velocity;
     }
 
     private void Jump()
     {
-       
+        // 地面にいるときだけジャンプ（簡易判定）
+        if (Mathf.Abs(rb.linearVelocity.y) < 0.01f)
+        {
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
     }
 }
