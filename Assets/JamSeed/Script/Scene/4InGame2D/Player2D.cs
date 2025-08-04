@@ -16,6 +16,7 @@ public class Player2D : MonoBehaviour
     [SerializeField] private Transform target2;
     [SerializeField] float shootInterval = 0.2f;
     [SerializeField] private int level = 0;
+    [SerializeField] GameObject PlayerClone;
     private bool isShooting = false;
     private float shootTimer = 0;
     //[SerializeField] float jumpForce = 5f;
@@ -28,16 +29,23 @@ public class Player2D : MonoBehaviour
         // 移動入力
         controls.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
         controls.Player.Move.canceled += ctx => moveInput = Vector2.zero;
-        controls.Player.Attack.performed += ctx => Shoot();
+        // 攻撃入力
         controls.Player.Attack.started += ctx =>
         {
             isShooting = true;
-            shootTimer = 0f; // すぐ撃つなら0でOK
+            shootTimer = 0f; // すぐ撃つ
         };
+
+        controls.Player.Attack.performed += ctx => Shoot();
 
         controls.Player.Attack.canceled += ctx =>
         {
             isShooting = false;
+        };
+
+        controls.Player.Jump.performed += ctx =>
+        {
+            Instantiate(PlayerClone, transform.position, Quaternion.identity);
         };
 
         // ジャンプ入力
@@ -62,10 +70,7 @@ public class Player2D : MonoBehaviour
 
     }
 
-    private void Jump()
-    {
-
-    }
+    
     private void Move()
     {
         Vector3 move = new Vector3(moveInput.x, 0f, moveInput.y) * moveSpeed;
