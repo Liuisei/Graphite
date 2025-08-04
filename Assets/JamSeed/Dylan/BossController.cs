@@ -14,6 +14,7 @@ public class BossController : MonoBehaviour
     public Transform firePoint;
     public float fireRate = 1f;
     public float fireTimer = 0f;
+    public float[] shotAngles;
 
     private bool hasEntered = false;
     private float direction = -1f;
@@ -71,6 +72,11 @@ public class BossController : MonoBehaviour
 
     void Shoot()
     {
-        Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
+        foreach (float angle in shotAngles)
+        {
+            Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
+
+            Instantiate(bulletPrefab, firePoint.position, rotation);
+        }
     }
 }
