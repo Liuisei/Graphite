@@ -1,8 +1,9 @@
 using UnityEngine;
 
-public class BulletMoveController : MonoBehaviour
+public class EnemyBulletSettings : MonoBehaviour
 {
     public float speed = 10f;
+    public int damage = 1;
 
     private void Start()
     {
@@ -12,11 +13,12 @@ public class BulletMoveController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(-Vector3.right * speed * Time.deltaTime);
+        transform.Translate(Vector3.left * speed * Time.deltaTime);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         Destroy(gameObject);
+        //damage
     }
 }
