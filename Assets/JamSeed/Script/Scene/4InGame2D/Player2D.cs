@@ -6,7 +6,9 @@ public class Player2D : MonoBehaviour
     private Vector2 moveInput; // 入力は2Dベクトルで扱う
     [SerializeField] float moveSpeed = 5f;
     [SerializeField] GameObject bulletPrefab;
-    [SerializeField] Transform firePoint;
+    [SerializeField] Transform firePoint1;
+    [SerializeField] Transform firePoint2;
+    [SerializeField] float shootInterval = 0.2f;
     private bool isShooting = false;
     private float shootTimer = 0;
     //[SerializeField] float jumpForce = 5f;
@@ -41,7 +43,16 @@ public class Player2D : MonoBehaviour
     private void Update()
     {
         Move();
-  
+        if (isShooting)
+        {
+            shootTimer += Time.deltaTime;
+            if (shootTimer >= shootInterval)
+            {
+                shootTimer = 0f;
+                Shoot();
+            }
+        }
+
     }
 
     private void Jump()
@@ -55,13 +66,20 @@ public class Player2D : MonoBehaviour
     }
     public void Shoot()
     {
-        GameObject bulletObj = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        GameObject bulletObj = Instantiate(bulletPrefab, firePoint1.position, firePoint1.rotation);
         Bullet bullet = bulletObj.GetComponent<Bullet>();
         if (bullet != null)
         {
-            bullet.SetDirection(firePoint.right); // 右方向に飛ばす例
+            bullet.SetDirection(firePoint1.right); // 右方向に飛ばす例
+        }
+        GameObject bulletObj2 = Instantiate(bulletPrefab, firePoint2.position, firePoint2.rotation);
+        Bullet bullet2 = bulletObj2.GetComponent<Bullet>();
+        if (bullet2 != null)
+        {
+            bullet2.SetDirection(firePoint2.right);
         }
     }
+
 
 
 }
