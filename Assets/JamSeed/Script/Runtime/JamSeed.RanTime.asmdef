@@ -2,7 +2,8 @@
     "name": "JamSeed.Runtime",
     "rootNamespace": "JamSeed.Runtime",
     "references": [
-        "JamSeed.Foundation"
+        "JamSeed.Foundation",
+        "UniTask"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

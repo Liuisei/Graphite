@@ -28,12 +28,11 @@ namespace JamSeed.Runtime
         {
             foreach (AudioSource source in _seSource)
             {
-                if (source.isPlaying)
-                    continue;
-
-                source.clip = clip;
-                source.Play();
-                return;
+                if (!source.isPlaying)
+                {
+                    source.PlayOneShot(clip);
+                    return;
+                }
             }
 
             Debug.LogWarning("No se played");

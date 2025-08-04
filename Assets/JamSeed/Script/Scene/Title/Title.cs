@@ -2,6 +2,7 @@ using JamSeed.Foundation;
 using UnityEngine;
 using DG.Tweening;
 using Cysharp.Threading.Tasks;
+using JamSeed.Runtime;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI; // DOTween
 
@@ -10,6 +11,7 @@ public class Title : SceneSingleton<Title>
     [SerializeField] LiteButton startButton;
     [SerializeField] LiteButton _creditButton;
     [SerializeField] private Image _creditsUI;
+    [SerializeField] private AudioClip _clickSound;
 
     // アニメーション時間
     [SerializeField] float hoverScaleDuration = 0.2f;
@@ -37,6 +39,7 @@ public class Title : SceneSingleton<Title>
         startButton.AddOnClick(() =>
         {
             if (isLocked) return; // すでにロックされているなら何もしない
+            SoundManager.Instance.PlaySe(_clickSound);
             startButton.image
                 .DOColor(pressedColor, colorChangeDuration)
                 .OnComplete(() =>
@@ -112,6 +115,7 @@ public class Title : SceneSingleton<Title>
     // Creditの表示
     private void OnClickCreditButton()
     {
+        SoundManager.Instance.PlaySe(_clickSound);
         _creditsUI.gameObject.SetActive(true);
         LiteButton creditsBackButton = _creditsUI.GetComponentInChildren<LiteButton>();
         creditsBackButton.AddOnClick(OnClickCreditBackButton);
@@ -120,6 +124,7 @@ public class Title : SceneSingleton<Title>
     // Creditの非表示
     private void OnClickCreditBackButton()
     {
+        SoundManager.Instance.PlaySe(_clickSound);
         _creditsUI.gameObject.SetActive(false);
     }
 }
