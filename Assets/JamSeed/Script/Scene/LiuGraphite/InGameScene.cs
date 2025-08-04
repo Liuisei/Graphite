@@ -94,7 +94,6 @@ public class PlayerDataLiu
     public event Action<PlayerState> OnPlayerStateChanged;
     public event Action<float> OnCloneCurrentTimeChanged;
     public event Action<float> OnFibarCloneCurrentTimeChanged;
-    public event Action<int> OnMaxPlayerHPChanged;
     public event Action<int> OnCurrentPlayerHPChanged;
 
     // ===== フィールド =====

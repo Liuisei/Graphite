@@ -11,7 +11,7 @@ public class InGameUIView : MonoBehaviour
     void Start()
     {
         SetHPBar(InGameScene.Instance._playerDataLiu.CurrentPlayerHP); // Example: Set HP bar to full (10 HP)
-        SetLVText(InGameScene.Instance._playerDataLiu._playerLevel.ToString()); // Example: Set LV text to 1
+        SetLVText(InGameScene.Instance._playerDataLiu.Level.ToString()); // Example: Set LV text to 1
     }
 
 
