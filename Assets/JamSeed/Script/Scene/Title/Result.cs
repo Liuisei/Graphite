@@ -1,18 +1,15 @@
-using JamSeed.Foundation;
-using UnityEngine;
-using DG.Tweening;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using JamSeed.Runtime;
-using UnityEngine.SceneManagement;
+using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
-public class Title : SceneSingleton<Title>
+public class Result : MonoBehaviour
 {
-    [SerializeField] LiteButton startButton;
-    [SerializeField] LiteButton _creditButton;
-    [SerializeField] private Image _creditsUI;
+    [SerializeField] LiteButton _retryButton;
+    [SerializeField] LiteButton _titleButton;
     [SerializeField] private AudioClip _clickSound;
-    [SerializeField] private StarWarsCreditController _starWarsCreditController;
 
     // アニメーション時間
     [SerializeField] float hoverScaleDuration = 0.2f;
@@ -33,83 +30,79 @@ public class Title : SceneSingleton<Title>
     //操作不可な状態にするためのフラグ
     bool isLocked = false;
 
-    private void Start()
+    void Start()
     {
-        Initialize();
-    }
+        normalColor = _retryButton.image.color;
 
-    private void Initialize()
-    {
-        normalColor = startButton.image.color;
-
-        startButton.AddOnClick(() =>
+        _retryButton.AddOnClick(() =>
         {
             if (isLocked) return; // すでにロックされているなら何もしない
             SoundManager.Instance.PlaySe(_clickSound);
-            startButton.image
+            _retryButton.image
                 .DOColor(pressedColor, colorChangeDuration)
                 .OnComplete(() =>
                 {
                     // マウスがまだ上なら hoverColor、外なら normalColor
                     var targetColor = isHovering ? hoverColor : normalColor;
-                    startButton.image.DOColor(targetColor, colorChangeDuration);
+                    _retryButton.image.DOColor(targetColor, colorChangeDuration);
                 });
             isLocked = true; // ボタンをロック
             To2DInGame().Forget();
         });
 
-        startButton.AddOnEnter(() =>
+        _retryButton.AddOnEnter(() =>
         {
             isHovering = true;
 
-            startButton.transform
+            _retryButton.transform
                 .DOScale(Vector3.one * hoverScale, hoverScaleDuration)
                 .SetEase(Ease.OutBack);
 
-            startButton.image
+            _retryButton.image
                 .DOColor(hoverColor, colorChangeDuration);
         });
 
-        _creditButton.AddOnEnter(() =>
+        _titleButton.AddOnEnter(() =>
         {
             isHovering = true;
 
-            _creditButton.transform
+            _titleButton.transform
                 .DOScale(Vector3.one * hoverScale, hoverScaleDuration)
                 .SetEase(Ease.OutBack);
 
-            _creditButton.image
+            _titleButton.image
                 .DOColor(hoverColor, colorChangeDuration);
         });
 
-        startButton.AddOnExit(() =>
+        _retryButton.AddOnExit(() =>
         {
             isHovering = false;
 
-            startButton.transform
+            _retryButton.transform
                 .DOScale(Vector3.one, normalScaleDuration)
                 .SetEase(Ease.OutBack);
 
-            startButton.image
+            _retryButton.image
                 .DOColor(normalColor, colorChangeDuration);
 
         });
 
-        _creditButton.AddOnExit(() =>
+        _titleButton.AddOnExit(() =>
         {
             isHovering = false;
 
-            _creditButton.transform
+            _titleButton.transform
                 .DOScale(Vector3.one, normalScaleDuration)
                 .SetEase(Ease.OutBack);
 
-            _creditButton.image
+            _titleButton.image
                 .DOColor(normalColor, colorChangeDuration);
 
         });
 
-        _creditButton.AddOnClick(OnClickCreditButton);
+        _titleButton.AddOnClick(OnClickTitleButton);
     }
+
 
     private async UniTaskVoid To2DInGame()
     {
@@ -118,21 +111,9 @@ public class Title : SceneSingleton<Title>
     }
 
     // Creditの表示
-    private void OnClickCreditButton()
+    private void OnClickTitleButton()
     {
         SoundManager.Instance.PlaySe(_clickSound);
-        _creditsUI.gameObject.SetActive(true);
-        LiteButton creditsBackButton = _creditsUI.GetComponentInChildren<LiteButton>();
-        creditsBackButton.AddOnClick(OnClickCreditBackButton);
-        _starWarsCreditController.gameObject.SetActive(true);
-        _starWarsCreditController.PlayCreditsAsync().Forget();
-    }
-
-    // Creditの非表示
-    private void OnClickCreditBackButton()
-    {
-        SoundManager.Instance.PlaySe(_clickSound);
-        _creditsUI.gameObject.SetActive(false);
-        _starWarsCreditController.gameObject.SetActive(false);
+        SceneManager.LoadScene("2Title");
     }
 }

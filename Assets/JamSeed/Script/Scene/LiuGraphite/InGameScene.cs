@@ -10,6 +10,7 @@ public class InGameScene : SceneSingleton<InGameScene>
 
     public Transform _playerSpawnPoint;
     public GameObject _playerPrefab;
+    private PlayerMovement _player;
 
 
     public Transform _enemySpawnPoint;
@@ -48,11 +49,12 @@ public class InGameScene : SceneSingleton<InGameScene>
         _gameStateText.text = "Go!";
         await UniTask.Delay(1000);
         _gameStateText.text = "";
+        _player.IsMove = true;
     }
 
     private void PlayerSpawn()
     {
-        Instantiate(_playerPrefab, _playerSpawnPoint);
+        _player = Instantiate(_playerPrefab, _playerSpawnPoint).GetComponent<PlayerMovement>();
     }
 
     private void EnemySpawn()
