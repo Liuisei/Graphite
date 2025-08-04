@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,6 +14,9 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 moveInput;
     private bool isFiring;
     private float nextFireTime; // 次に撃てる時間
+
+    public Action onPlayerClone; // クローン発射時のイベント
+    public Action onFire; // 発射時のイベント
 
     private void Awake()
     {
@@ -67,5 +71,6 @@ public class PlayerMovement : MonoBehaviour
     private void Fire()
     {
         Debug.Log("Fire 発射！");
+        onFire?.Invoke();
     }
 }

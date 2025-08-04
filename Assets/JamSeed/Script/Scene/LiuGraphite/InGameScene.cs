@@ -24,6 +24,8 @@ public class InGameScene : MonoBehaviour
     public int _maxOkawariTime = 100;
     public int _currentOkawariTime = 0;
 
+    PlayerDataLiu _playerDataLiu = new PlayerDataLiu();
+
 
     private void Start()
     {
@@ -77,4 +79,35 @@ public class InGameScene : MonoBehaviour
 
 
 
+}
+
+public class PlayerDataLiu
+{
+    public PlayerLevel _playerLevel = PlayerLevel.Lv1;
+
+    public PlayerState _playerState = PlayerState.normal;
+
+    public float CloneCooldownTime = 5f; // クローンのクールダウン時間
+    public float CloneCurrentTime = 0f; // クールダウンの現在時間
+
+    //フィーバータイムのクローンクールタイム
+
+    public float FibarCloneCooldownTime = 2f; // フィーバータイム中のクローンのクールダウン時間
+    public float FibarCloneCurrentTime = 0f; // フィーバータイム中のクールダウンの現在時間
+
+    public int MaxPlayerHP = 100;
+    public int CurrentPlayerHP;
+
+    public enum PlayerState
+    {
+        normal,
+        clone,
+    }
+
+    public enum PlayerLevel
+    {
+        Lv1,
+        Lv2,
+        Lv3,
+    }
 }
