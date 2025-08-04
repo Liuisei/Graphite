@@ -249,6 +249,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   fireCooldown: 0.2
+  IsMove: 0
 --- !u!114 &3521733821420186643
 MonoBehaviour:
   m_ObjectHideFlags: 0

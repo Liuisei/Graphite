@@ -16,12 +16,7 @@ public class StarWarsCreditController : MonoBehaviour
     [SerializeField] private float _delayBetweenCredits = 1f;
     [SerializeField] private Vector3 _startPosition;
 
-    private void Start()
-    {
-        PlayCreditsAsync().Forget();
-    }
-
-    private async UniTaskVoid PlayCreditsAsync()
+    public async UniTaskVoid PlayCreditsAsync()
     {
         _creditText.transform.localPosition = _startPosition;
         _endImage.gameObject.SetActive(false);

@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float fireCooldown = 0.2f; // 発射間隔（秒）
-    
+
 
     private Rigidbody rb;
     private InputSystem_Actions inputActions;
@@ -17,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
 
     public Action onPlayerClone; // クローン発射時のイベント
     public Action onFire; // 発射時のイベント
+    public bool IsMove = false;
 
     private void Awake()
     {
@@ -40,6 +41,7 @@ public class PlayerMovement : MonoBehaviour
     private void OnEnable()
     {
         inputActions.Enable();
+        IsMove = false;
     }
 
     private void OnDisable()
@@ -49,6 +51,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // ゲームがはじまるまで動かないようにしたよん
+        if(!IsMove)
+            return;
+
         // 移動処理
         Vector3 move = new Vector3(moveInput.x, 0f, moveInput.y) * moveSpeed;
         Vector3 velocity = move;

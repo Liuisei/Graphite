@@ -11,8 +11,8 @@ public class Title : SceneSingleton<Title>
     [SerializeField] LiteButton startButton;
     [SerializeField] LiteButton _creditButton;
     [SerializeField] private Image _creditsUI;
-    [SerializeField] private Image _blackBoard;
     [SerializeField] private AudioClip _clickSound;
+    [SerializeField] private StarWarsCreditController _starWarsCreditController;
 
     // アニメーション時間
     [SerializeField] float hoverScaleDuration = 0.2f;
@@ -111,13 +111,6 @@ public class Title : SceneSingleton<Title>
         _creditButton.AddOnClick(OnClickCreditButton);
     }
 
-    private void StartAnimation()
-    {
-        // 黒い画面を表示
-        _blackBoard.gameObject.SetActive(true);
-        // 船のAnimationと波のParticleを表示
-    }
-
     private async UniTaskVoid To2DInGame()
     {
         await UniTask.Delay(500); // 1秒待機
@@ -131,6 +124,8 @@ public class Title : SceneSingleton<Title>
         _creditsUI.gameObject.SetActive(true);
         LiteButton creditsBackButton = _creditsUI.GetComponentInChildren<LiteButton>();
         creditsBackButton.AddOnClick(OnClickCreditBackButton);
+        _starWarsCreditController.gameObject.SetActive(true);
+        _starWarsCreditController.PlayCreditsAsync().Forget();
     }
 
     // Creditの非表示
@@ -138,5 +133,6 @@ public class Title : SceneSingleton<Title>
     {
         SoundManager.Instance.PlaySe(_clickSound);
         _creditsUI.gameObject.SetActive(false);
+        _starWarsCreditController.gameObject.SetActive(false);
     }
 }
