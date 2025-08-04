@@ -82,14 +82,14 @@ public class Player2D : MonoBehaviour
         Bullet bullet = bulletObj.GetComponent<Bullet>();
         if (bullet != null)
         {
-            bullet.SetDirection(firePoint1.right);
+            bullet.SetDirection(-firePoint1.forward);
             Destroy(bulletObj, 5f);// 右方向に飛ばす例
         }
         GameObject bulletObj2 = Instantiate(bulletPrefab, firePoint2.position, firePoint2.rotation);
         Bullet bullet2 = bulletObj2.GetComponent<Bullet>();
         if (bullet2 != null)
         {
-            bullet2.SetDirection(firePoint2.right);
+            bullet2.SetDirection(-firePoint2.forward);
             Destroy(bulletObj2, 5f);
         }
         if (level == 1)
@@ -98,7 +98,7 @@ public class Player2D : MonoBehaviour
             Bullet bullet3 = bulletObj3.GetComponent<Bullet>();
             if (bullet3 != null)
             {
-                Vector3 direction = firePoint5.right;  // firePoint3の向いている方向（Z+方向）
+                Vector3 direction = -firePoint5.forward;  // firePoint3の向いている方向（Z+方向）
                 direction.y = 0;                         // Yを0にしてXZ平面に固定
                 direction.Normalize();                   // 正規化
 
@@ -112,7 +112,7 @@ public class Player2D : MonoBehaviour
             if (bullet4 != null)
             {
                 // ターゲット方向ベクトル（正規化）
-                Vector3 direction = (target2.position - firePoint4.position).normalized;
+                Vector3 direction = (target1.position - firePoint4.position).normalized;
                 direction.y = 0;
                 bullet4.SetDirection(direction);
                 Destroy(bulletObj4, 5f);
