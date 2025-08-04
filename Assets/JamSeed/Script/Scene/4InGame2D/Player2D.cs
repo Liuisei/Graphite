@@ -45,7 +45,7 @@ public class Player2D : MonoBehaviour
 
         controls.Player.Jump.performed += ctx =>
         {
-            Instantiate(PlayerClone, transform.position, Quaternion.identity);
+            Instantiate(PlayerClone, transform.position, Quaternion.Euler(0f, -90f, 0f));
         };
 
         // ジャンプ入力

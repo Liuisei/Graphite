@@ -194,6 +194,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 348191291032505495, guid: f0d660da0a60b974aa9070ff28c35da6, type: 3}
   firePoint1: {fileID: 916747959426903604}
   firePoint2: {fileID: 2313103977328375970}
+  firePoint3: {fileID: 1145682770391384686}
   firePoint4: {fileID: 200209917394456159}
   firePoint5: {fileID: 736953050381219211}
   target: {fileID: 2747722772991362735}
