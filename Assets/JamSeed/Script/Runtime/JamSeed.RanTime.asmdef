@@ -1,7 +1,9 @@
 {
     "name": "JamSeed.Runtime",
     "rootNamespace": "JamSeed.Runtime",
-    "references": [],
+    "references": [
+        "JamSeed.Foundation"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

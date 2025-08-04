@@ -1,13 +1,15 @@
 using JamSeed.Foundation;
 using UnityEngine;
 using DG.Tweening;
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
-using UnityEngine.SceneManagement; // DOTween
+using UnityEngine.SceneManagement;
+using UnityEngine.UI; // DOTween
 
 public class Title : SceneSingleton<Title>
 {
     [SerializeField] LiteButton startButton;
+    [SerializeField] LiteButton _creditButton;
+    [SerializeField] private Image _creditsUI;
 
     // アニメーション時間
     [SerializeField] float hoverScaleDuration = 0.2f;
@@ -57,8 +59,18 @@ public class Title : SceneSingleton<Title>
 
             startButton.image
                 .DOColor(hoverColor, colorChangeDuration);
+        });
 
-            Debug.Log("Start Button Hovered");
+        _creditButton.AddOnEnter(() =>
+        {
+            isHovering = true;
+
+            _creditButton.transform
+                .DOScale(Vector3.one * hoverScale, hoverScaleDuration)
+                .SetEase(Ease.OutBack);
+
+            _creditButton.image
+                .DOColor(hoverColor, colorChangeDuration);
         });
 
         startButton.AddOnExit(() =>
@@ -72,8 +84,22 @@ public class Title : SceneSingleton<Title>
             startButton.image
                 .DOColor(normalColor, colorChangeDuration);
 
-            Debug.Log("Start Button Exited");
         });
+
+        _creditButton.AddOnExit(() =>
+        {
+            isHovering = false;
+
+            _creditButton.transform
+                .DOScale(Vector3.one, normalScaleDuration)
+                .SetEase(Ease.OutBack);
+
+            _creditButton.image
+                .DOColor(normalColor, colorChangeDuration);
+
+        });
+
+        _creditButton.AddOnClick(OnClickCreditButton);
     }
 
 
@@ -83,4 +109,17 @@ public class Title : SceneSingleton<Title>
         SceneManager.LoadScene("4InGame2D");
     }
 
+    // Creditの表示
+    private void OnClickCreditButton()
+    {
+        _creditsUI.gameObject.SetActive(true);
+        LiteButton creditsBackButton = _creditsUI.GetComponentInChildren<LiteButton>();
+        creditsBackButton.AddOnClick(OnClickCreditBackButton);
+    }
+
+    // Creditの非表示
+    private void OnClickCreditBackButton()
+    {
+        _creditsUI.gameObject.SetActive(false);
+    }
 }
