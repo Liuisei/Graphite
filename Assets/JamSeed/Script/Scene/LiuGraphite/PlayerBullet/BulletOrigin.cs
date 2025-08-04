@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerBullet1 : MonoBehaviour, IHasHp
+public class BulletOrigin : MonoBehaviour, IHasHp
 {
     [Header("HP設定")]
     public int maxHP = 100; // 最大HPを設定
@@ -18,27 +18,19 @@ public class PlayerBullet1 : MonoBehaviour, IHasHp
     [Header("自動破棄設定")]
     public float lifeTime = 5f; // 自動消滅時間
 
-    private int teamID = 1; // チームIDを設定（プレイヤー弾丸）
+    private int _teamID = 1; // チームIDを設定（プレイヤー弾丸）
     private Rigidbody rb;
     private bool isInitialized = false;
 
     // IHasHpの実装
     public int HP => currentHP;
     public int MaxHP => maxHP;
-    public int TeamID => teamID;
+    public int TeamID => _teamID;
     public event Action OnHPChanged;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-
-        // 初期化がまだされていない場合はデフォルト初期化
-        if (!isInitialized)
-        {
-            Initialize(direction.normalized, speed);
-        }
-
-        // 一定時間後に自動破棄
         Destroy(gameObject, lifeTime);
     }
 
@@ -48,20 +40,18 @@ public class PlayerBullet1 : MonoBehaviour, IHasHp
     /// <param name="moveDirection">移動方向（正規化される）</param>
     /// <param name="bulletSpeed">弾丸の速度</param>
     /// <param name="bulletDamage">与えるダメージ（オプション）</param>
-    public void Initialize(Vector3 moveDirection, float bulletSpeed, int bulletDamage = -1)
+    public void Initialize(Vector3 moveDirection, float bulletSpeed, int teamID, int bulletDamage = -1)
     {
         // HP初期化
         currentHP = maxHP;
-
+        _teamID = teamID; // チームIDを設定
         // 移動設定
         direction = moveDirection.normalized;
         speed = bulletSpeed;
 
-        // ダメージ設定（-1の場合はデフォルト値を使用）
-        if (bulletDamage >= 0)
-        {
-            damage = bulletDamage;
-        }
+
+        damage = bulletDamage;
+
 
         // Rigidbodyが取得できている場合は即座に移動開始
         if (rb != null)
@@ -86,6 +76,7 @@ public class PlayerBullet1 : MonoBehaviour, IHasHp
 
     void OnTriggerEnter(Collider other)
     {
+        Debug.Log($"Bullet collided with: {other.gameObject.name}");
         // IHasHpインターフェースを持つオブジェクトかチェック
         IHasHp target = other.GetComponent<IHasHp>();
 
@@ -95,10 +86,10 @@ public class PlayerBullet1 : MonoBehaviour, IHasHp
             if (target.TeamID != this.TeamID)
             {
                 // ダメージを与える
-                target.TakeDamage(damage, gameObject);
+                target.ChangeHP(damage, gameObject);
 
                 // 自分もダメージを受ける（貫通しない弾丸の場合）
-                TakeDamage(currentHP, other.gameObject); // 一撃で破壊
+                ChangeHP(currentHP, other.gameObject); // 一撃で破壊
             }
         }
     }
@@ -111,7 +102,7 @@ public class PlayerBullet1 : MonoBehaviour, IHasHp
         OnHPChanged?.Invoke();
     }
 
-    public void TakeDamage(int amount, GameObject attacker)
+    public void ChangeHP(int amount, GameObject attacker)
     {
         if (amount <= 0) return;
 
