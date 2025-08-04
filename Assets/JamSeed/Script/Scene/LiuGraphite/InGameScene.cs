@@ -1,8 +1,11 @@
 using Cysharp.Threading.Tasks;
+using JamSeed.Foundation;
+using System;
 using System.Diagnostics;
 using TMPro;
+using UnityEditor.SearchService;
 using UnityEngine;
-public class InGameScene : MonoBehaviour
+public class InGameScene : SceneSingleton<InGameScene>
 {
 
     public Transform _playerSpawnPoint;
@@ -24,7 +27,7 @@ public class InGameScene : MonoBehaviour
     public int _maxOkawariTime = 100;
     public int _currentOkawariTime = 0;
 
-    PlayerDataLiu _playerDataLiu = new PlayerDataLiu();
+    public PlayerDataLiu _playerDataLiu = new PlayerDataLiu();
 
 
     private void Start()
@@ -81,23 +84,96 @@ public class InGameScene : MonoBehaviour
 
 }
 
+
 public class PlayerDataLiu
 {
-    public PlayerLevel _playerLevel = PlayerLevel.Lv1;
+    // ===== イベント =====
+    public event Action<PlayerLevel> OnPlayerLevelChanged;
+    public event Action<PlayerState> OnPlayerStateChanged;
+    public event Action<float> OnCloneCurrentTimeChanged;
+    public event Action<float> OnFibarCloneCurrentTimeChanged;
+    public event Action<int> OnMaxPlayerHPChanged;
+    public event Action<int> OnCurrentPlayerHPChanged;
 
-    public PlayerState _playerState = PlayerState.normal;
+    // ===== フィールド =====
+    private PlayerLevel _playerLevel = PlayerLevel.Lv1;
+    private PlayerState _playerState = PlayerState.normal;
+    public float _cloneCooldownTime = 5f;
+    private float _cloneCurrentTime = 0f;
+    public float _fibarCloneCooldownTime = 2f;
+    private float _fibarCloneCurrentTime = 0f;
+    public int _maxPlayerHP = 10;
+    private int _currentPlayerHP = 10;
 
-    public float CloneCooldownTime = 5f; // クローンのクールダウン時間
-    public float CloneCurrentTime = 0f; // クールダウンの現在時間
+    // ===== プロパティ =====
+    public PlayerLevel Level
+    {
+        get => _playerLevel;
+        set
+        {
+            if (_playerLevel != value)
+            {
+                _playerLevel = value;
+                OnPlayerLevelChanged?.Invoke(value);
+            }
+        }
+    }
 
-    //フィーバータイムのクローンクールタイム
+    public PlayerState State
+    {
+        get => _playerState;
+        set
+        {
+            if (_playerState != value)
+            {
+                _playerState = value;
+                OnPlayerStateChanged?.Invoke(value);
+            }
+        }
+    }
 
-    public float FibarCloneCooldownTime = 2f; // フィーバータイム中のクローンのクールダウン時間
-    public float FibarCloneCurrentTime = 0f; // フィーバータイム中のクールダウンの現在時間
 
-    public int MaxPlayerHP = 100;
-    public int CurrentPlayerHP;
 
+    public float CloneCurrentTime
+    {
+        get => _cloneCurrentTime;
+        set
+        {
+            if (Math.Abs(_cloneCurrentTime - value) > float.Epsilon)
+            {
+                _cloneCurrentTime = value;
+                OnCloneCurrentTimeChanged?.Invoke(value);
+            }
+        }
+    }
+
+    public float FibarCloneCurrentTime
+    {
+        get => _fibarCloneCurrentTime;
+        set
+        {
+            if (Math.Abs(_fibarCloneCurrentTime - value) > float.Epsilon)
+            {
+                _fibarCloneCurrentTime = value;
+                OnFibarCloneCurrentTimeChanged?.Invoke(value);
+            }
+        }
+    }
+
+    public int CurrentPlayerHP
+    {
+        get => _currentPlayerHP;
+        set
+        {
+            if (_currentPlayerHP != value)
+            {
+                _currentPlayerHP = value;
+                OnCurrentPlayerHPChanged?.Invoke(value);
+            }
+        }
+    }
+
+    // ===== 列挙型 =====
     public enum PlayerState
     {
         normal,
@@ -111,3 +187,4 @@ public class PlayerDataLiu
         Lv3,
     }
 }
+
