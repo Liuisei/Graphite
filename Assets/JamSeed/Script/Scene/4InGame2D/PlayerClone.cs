@@ -37,43 +37,60 @@ public class PlayerClone : MonoBehaviour
         }
     }
 
-    void Shoot()
+    public void Shoot()
     {
-        Debug.Log($"{shootTimer}{shootInterval}");
-
         GameObject bulletObj = Instantiate(bulletPrefab, firePoint1.position, firePoint1.rotation);
         Bullet bullet = bulletObj.GetComponent<Bullet>();
         if (bullet != null)
         {
             bullet.SetDirection(firePoint1.right);
+            Destroy(bulletObj, 5f);// 右方向に飛ばす例
         }
-
         GameObject bulletObj2 = Instantiate(bulletPrefab, firePoint2.position, firePoint2.rotation);
         Bullet bullet2 = bulletObj2.GetComponent<Bullet>();
         if (bullet2 != null)
         {
             bullet2.SetDirection(firePoint2.right);
+            Destroy(bulletObj2, 5f);
         }
-
         if (level == 1)
         {
-            GameObject bulletObj4 = Instantiate(bulletPrefab, firePoint4.position, Quaternion.identity);
+            GameObject bulletObj3 = Instantiate(bulletPrefab, firePoint5.position, Quaternion.identity);
+            Bullet bullet3 = bulletObj3.GetComponent<Bullet>();
+            if (bullet3 != null)
+            {
+                Vector3 direction = firePoint5.right;  // firePoint3の向いている方向（Z+方向）
+                direction.y = 0;                         // Yを0にしてXZ平面に固定
+                direction.Normalize();                   // 正規化
+
+                bullet3.SetDirection(direction);
+                Destroy(bulletObj3, 5f);
+            }
+
+
+            GameObject bulletObj4 = Instantiate(bulletPrefab, firePoint4.position, Quaternion.identity); // 回転不要なら identity
             Bullet bullet4 = bulletObj4.GetComponent<Bullet>();
             if (bullet4 != null)
             {
+                // ターゲット方向ベクトル（正規化）
                 Vector3 direction = (target2.position - firePoint4.position).normalized;
                 direction.y = 0;
                 bullet4.SetDirection(direction);
+                Destroy(bulletObj4, 5f);
             }
 
-            GameObject bulletObj5 = Instantiate(bulletPrefab, firePoint5.position, Quaternion.identity);
+
+            GameObject bulletObj5 = Instantiate(bulletPrefab, firePoint5.position, Quaternion.identity); // 回転不要なら identity
             Bullet bullet5 = bulletObj5.GetComponent<Bullet>();
             if (bullet5 != null)
             {
+                // ターゲット方向ベクトル（正規化）
                 Vector3 direction = (target.position - firePoint5.position).normalized;
                 direction.y = 0;
                 bullet5.SetDirection(direction);
+                Destroy(bulletObj5, 5f);
             }
+
         }
     }
 }
