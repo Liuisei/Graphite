@@ -1,8 +1,10 @@
 using Cysharp.Threading.Tasks;
+using JamSeed.Foundation;
 using System.Diagnostics;
 using TMPro;
+using UnityEditor.SearchService;
 using UnityEngine;
-public class InGameScene : MonoBehaviour
+public class InGameScene : SceneSingleton<InGameScene>
 {
 
     public Transform _playerSpawnPoint;
@@ -24,7 +26,7 @@ public class InGameScene : MonoBehaviour
     public int _maxOkawariTime = 100;
     public int _currentOkawariTime = 0;
 
-    PlayerDataLiu _playerDataLiu = new PlayerDataLiu();
+    public PlayerDataLiu _playerDataLiu = new PlayerDataLiu();
 
 
     private void Start()
@@ -95,8 +97,8 @@ public class PlayerDataLiu
     public float FibarCloneCooldownTime = 2f; // フィーバータイム中のクローンのクールダウン時間
     public float FibarCloneCurrentTime = 0f; // フィーバータイム中のクールダウンの現在時間
 
-    public int MaxPlayerHP = 100;
-    public int CurrentPlayerHP;
+    public int MaxPlayerHP = 10;
+    public int CurrentPlayerHP = 10;
 
     public enum PlayerState
     {
