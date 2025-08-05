@@ -18,6 +18,8 @@ public class Player2D : MonoBehaviour
     [SerializeField] public  int level = 0;
     [SerializeField] GameObject PlayerClone;
     private int playerHp = 5;
+    [SerializeField] AudioSource playerAudio;
+    [SerializeField]AudioClip[] playerClip;
 
     [Header("バリア設定")]
     [SerializeField] private GameObject barrierBlock; // バリアの見た目（Cube）
@@ -32,7 +34,7 @@ public class Player2D : MonoBehaviour
     private void Awake()
     {
         controls = new InputSystem_Actions();
-
+        playerAudio = GetComponent<AudioSource>();
         controls.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
         controls.Player.Move.canceled += ctx => moveInput = Vector2.zero;
 
@@ -92,6 +94,15 @@ public class Player2D : MonoBehaviour
 
     public void Shoot()
     {
+        if (playerClip.Length > 0)
+        {
+            playerAudio.PlayOneShot(playerClip[1]);
+            if (level == 1)
+            {
+                playerAudio.PlayOneShot(playerClip[2]);
+            }
+        }
+
         GameObject bulletObj = Instantiate(bulletPrefab, firePoint1.position, firePoint1.rotation);
         Bullet bullet = bulletObj.GetComponent<Bullet>();
         if (bullet != null)
@@ -150,6 +161,10 @@ public class Player2D : MonoBehaviour
             if (!isBarrierActive)
             {
                 playerHp--;
+                if (playerClip.Length > 1)
+                {
+                    playerAudio.PlayOneShot(playerClip[0]); // OK！
+                }
                 if (playerHp < 0)
                 {
                     Debug.Log("ゲームオーバー");
@@ -162,6 +177,11 @@ public class Player2D : MonoBehaviour
         if (other.CompareTag("item"))
         {
             ActivateBarrier();
+            if (playerClip.Length > 1)
+            {
+                playerAudio.PlayOneShot(playerClip[4]);
+            }
+
         }
     }
 
