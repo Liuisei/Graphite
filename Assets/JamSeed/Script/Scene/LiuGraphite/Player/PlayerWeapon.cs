@@ -38,7 +38,8 @@ public class PlayerWeapon : MonoBehaviour
         {
             BulletOrigin bullet = Instantiate(bulletPrefab, firepoint.position, Quaternion.identity);
             //bullet.transform.forward = fireVectals[i].position - firepoint.position; // 向きを設定
-            bullet.Initialize((fireVectals[i].position - firepoint.position), speed, damage);
+            bullet.Initialize((fireVectals[i].position - firepoint.position), speed, 0,damage);
+            Debug.Log($"Pdamage{damage}");
         }
     }
     public void FireLevel2()
@@ -47,7 +48,8 @@ public class PlayerWeapon : MonoBehaviour
         {
             BulletOrigin bullet = Instantiate(bulletPrefab, firepoint.position, Quaternion.identity);
             bullet.transform.forward = fireVectals[i].position - firepoint.position; // 向きを設定
-            bullet.Initialize((fireVectals[i].position - firepoint.position), speed, damage);
+            bullet.Initialize((fireVectals[i].position - firepoint.position), speed,0, damage);
+            Debug.Log($"Pdamage{damage}");
         }
     }
     public void FireLevel3()

@@ -114,7 +114,7 @@ public class Title : SceneSingleton<Title>
     private async UniTaskVoid To2DInGame()
     {
         await UniTask.Delay(500); // 1秒待機
-        SceneManager.LoadScene("4InGame2D");
+        SceneManager.LoadScene("LiuInGame");
     }
 
     // Creditの表示

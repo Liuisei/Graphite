@@ -1,6 +1,8 @@
+using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class BossController : MonoBehaviour
+public class BossController : MonoBehaviour, IHasHp
 {
     [Header("Movement")]
     public float moveSpeed = 1f;
@@ -8,6 +10,18 @@ public class BossController : MonoBehaviour
     public float maxY = 5f;
     public float startReturnY = 5f;
 
+    [SerializeField] private int maxHP = 100;
+    private int currentHP;
+
+    public int HP => currentHP;
+    public int MaxHP => maxHP;
+    public int TeamID => 3; // チームID
+    public void ChangeHP(int amount, GameObject attacker)
+    {
+        throw new NotImplementedException();
+    }
+
+    public event Action OnHPChanged;
 
     [Header("Shooting")]
     public GameObject bulletPrefab;
@@ -22,7 +36,7 @@ public class BossController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        currentHP = maxHP;
     }
 
     // Update is called once per frame
@@ -31,7 +45,23 @@ public class BossController : MonoBehaviour
         HandleMovement();
         HandleShooting();
     }
+    public void TakeDamage(int amount)
+    {
+        currentHP = Mathf.Clamp(currentHP - amount, 0, maxHP);
+        Debug.Log(currentHP);
+        Debug.Log($"[Player] Took damage: {amount} → HP: {currentHP}/{maxHP}");
 
+        if (currentHP <= 0)
+        {
+            Die();
+        }
+    }
+    private void Die()
+    {
+        Debug.Log("[Player] 死亡しました");
+        // 死亡処理（アニメーション、リスポーンなど）
+        SceneManager.LoadScene("3OutGame");
+    }
     void HandleMovement()
     {
         if (!hasEntered)
