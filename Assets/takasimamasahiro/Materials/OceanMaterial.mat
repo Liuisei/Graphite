@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: OceanMaterial
-  m_Shader: {fileID: 4800000, guid: 3670d6e240f145b4cb35d306963695bb, type: 3}
+  m_Shader: {fileID: 4800000, guid: e4097b28b12f4834298d738ceff316a5, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -113,7 +113,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _AddPrecomputedVelocity: 0
-    - _Alpha: 0.5
+    - _Alpha: 0.31
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _Blend: 0
