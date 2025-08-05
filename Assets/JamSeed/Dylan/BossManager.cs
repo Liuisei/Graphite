@@ -6,9 +6,9 @@ public class BossManager : MonoBehaviour
 {
     [Header("Movement")]
     public float moveSpeed = 1f;
-    public float minY = -5f;
-    public float maxY = 5f;
-    public float startReturnY = 5f;
+    public float minZ = -5f;
+    public float maxZ = 5f;
+    public float startReturnZ = 5f;
 
 
     [Header("Shooting")]
@@ -50,22 +50,22 @@ public class BossManager : MonoBehaviour
     {
         if (!hasEntered)
         {
-            transform.Translate(Vector3.down * moveSpeed * Time.deltaTime);
+            transform.position += new Vector3(0, 0, direction * moveSpeed * Time.deltaTime);
 
-            if (transform.position.y <= startReturnY)
+            if (transform.position.z <= startReturnZ)
             {
                 hasEntered = true;
             }
         }
         else
         {
-            transform.Translate(Vector3.up * direction * moveSpeed * Time.deltaTime);
+            transform.position += new Vector3(0, 0, direction * moveSpeed * Time.deltaTime);
 
-            if (transform.position.y >= maxY - 0.01f && direction > 0f)
+            if (transform.position.z >= maxZ - 0.01f && direction > 0f)
             {
                 direction = -1f;
             }
-            else if (transform.position.y <= minY + 0.01f && direction < 0f)
+            else if (transform.position.z <= minZ + 0.01f && direction < 0f)
             {
                 direction = 1f;
             }
@@ -88,7 +88,7 @@ public class BossManager : MonoBehaviour
     {
         foreach (float angle in shotAngles)
         {
-            Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
+            Quaternion rotation = Quaternion.Euler(0f, angle, 0f);
             SoundManager.Instance.PlaySe(houdan);
             Instantiate(bulletPrefab, firePoint.position, rotation);
         }
@@ -120,8 +120,9 @@ public class BossManager : MonoBehaviour
         Vector3 end = player.transform.position;
         Vector3 direction = (end - start).normalized;
         float distance = Vector3.Distance(start, end);
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
         Quaternion rotation = Quaternion.Euler(0, 0, angle);
+
 
         // Step 1: Warning
         GameObject warning = Instantiate(thunderWarningPrefab, start, rotation);
