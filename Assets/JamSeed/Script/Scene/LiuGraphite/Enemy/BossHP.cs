@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class BossHP : MonoBehaviour,IHasHp
@@ -42,8 +43,9 @@ public class BossHP : MonoBehaviour,IHasHp
     {
         Debug.LogWarning($"ChangeHP called with amount: {amount}, attacker: {attacker?.name} {currentHP} {maxHP}");
         currentHP -= amount;
-        if (currentHP < 0)
+        if (currentHP <= 0)
         {
+            Result();
             currentHP = 0;
         }
         else if (currentHP > maxHP)
@@ -52,5 +54,11 @@ public class BossHP : MonoBehaviour,IHasHp
         }
 
         UpdateHPBar();
+    }
+
+    public void Result()
+    {
+        Debug.Log("Boss defeated! Loading result scene...");
+        SceneManager.LoadScene("3OutGame");
     }
 }

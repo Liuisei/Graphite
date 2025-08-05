@@ -635,7 +635,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d12a5a9a2957f0d4bbe466731e1b61bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 1000
+  maxHP: 500000
   hpSlider: {fileID: 8264546553741192768}
 --- !u!65 &128772603774213929
 BoxCollider:
