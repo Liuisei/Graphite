@@ -164,6 +164,7 @@ public class Player2D : MonoBehaviour
                 if (playerClip.Length > 1)
                 {
                     playerAudio.PlayOneShot(playerClip[0]); // OK！
+                   
                 }
                 if (playerHp < 0)
                 {
@@ -179,6 +180,7 @@ public class Player2D : MonoBehaviour
             ActivateBarrier();
             if (playerClip.Length > 1)
             {
+                Debug.Log("aa");
                 playerAudio.PlayOneShot(playerClip[4]);
             }
 
