@@ -1,15 +1,22 @@
 using JamSeed.Runtime;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BossManager : MonoBehaviour
 {
+    public enum BossPhase
+    {
+        Phase1_Shields,
+        Phase2_LampionAndMouth,
+        Phase3_Body
+    }
+
     [Header("Movement")]
     public float moveSpeed = 1f;
     public float minZ = -5f;
     public float maxZ = 5f;
     public float startReturnZ = 5f;
-
 
     [Header("Shooting")]
     public GameObject bulletPrefab;
@@ -23,21 +30,25 @@ public class BossManager : MonoBehaviour
     public GameObject thunderPrefab;
     public Transform thunderFirePoint;
     public float thunderWarningTime = 3f;
-    public float thunderSpeed = 15f;        // vitesse de l'éclair une fois lancé
+    public float thunderSpeed = 15f;
     public float thunderRate = 5f;
     public float thunderTimer = 0f;
     public AudioClip thunderClip;
 
+    [Header("Phases")]
+    public List<BossPhaseParts> shields;              // Phase 1
+    public List<BossPhaseParts> lampionAndMouth;      // Phase 2
+    public BossPhaseParts body;                       // Phase 3
+
     private bool hasEntered = false;
     private float direction = -1f;
+    private BossPhase currentPhase = BossPhase.Phase1_Shields;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        InitPhase(shields);
     }
 
-    // Update is called once per frame
     void Update()
     {
         HandleMovement();
@@ -76,7 +87,7 @@ public class BossManager : MonoBehaviour
         if (!hasEntered) return;
 
         fireTimer += Time.deltaTime;
-        if(fireTimer >= 1f / fireRate)
+        if (fireTimer >= 1f / fireRate)
         {
             fireTimer = 0f;
             Shoot();
@@ -98,7 +109,7 @@ public class BossManager : MonoBehaviour
         if (!hasEntered) return;
 
         thunderTimer += Time.deltaTime;
-        if(thunderTimer >= thunderRate)
+        if (thunderTimer >= thunderRate)
         {
             thunderTimer = 0f;
             StartThunderAttack();
@@ -110,17 +121,12 @@ public class BossManager : MonoBehaviour
         StartCoroutine(ThunderAttackCoroutine());
     }
 
-
-
     private IEnumerator ThunderAttackCoroutine()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player == null) yield break;
 
         GameObject thunder = Instantiate(thunderPrefab, thunderFirePoint.position, Quaternion.identity);
-
-        // On ne touche pas à la rotation Z ici, c'est dans l'enfant Visual dans le prefab
-        // thunder.transform.rotation = Quaternion.Euler(0f, 0f, -90f); // <-- supprimé
 
         float timer = 0f;
         Vector3 targetPos = Vector3.zero;
@@ -133,12 +139,11 @@ public class BossManager : MonoBehaviour
                 thunder.transform.position = thunderFirePoint.position;
 
                 Vector3 dir = targetPos - thunder.transform.position;
-                dir.y = 0f; // On veut rotation horizontale uniquement
+                dir.y = 0f;
 
                 if (dir.sqrMagnitude > 0.001f)
                 {
-                    float baseRotationY = -79f; // Valeur à ajuster selon ce que tu trouves dans le prefab
-
+                    float baseRotationY = -79f;
                     float angleY = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
                     float correctedY = angleY - baseRotationY;
 
@@ -164,4 +169,43 @@ public class BossManager : MonoBehaviour
         }
     }
 
+    // ------------------------ PHASE SYSTEM ------------------------
+    private void InitPhase(List<BossPhaseParts> parts)
+    {
+        foreach (var part in parts)
+        {
+            part.OnDestroyed += OnPartDestroyed;
+        }
+    }
+
+    private void OnPartDestroyed(BossPhaseParts part)
+    {
+        switch (currentPhase)
+        {
+            case BossPhase.Phase1_Shields:
+                shields.Remove(part);
+                if (shields.Count == 0)
+                {
+                    Debug.Log("[BossManager] Phase 1 over → Phase 2");
+                    currentPhase = BossPhase.Phase2_LampionAndMouth;
+                    InitPhase(lampionAndMouth);
+                }
+                break;
+
+            case BossPhase.Phase2_LampionAndMouth:
+                lampionAndMouth.Remove(part);
+                if (lampionAndMouth.Count == 0)
+                {
+                    Debug.Log("[BossManager] Phase 2 over → Phase 3");
+                    currentPhase = BossPhase.Phase3_Body;
+                    body.OnDestroyed += OnFinalPartDestroyed;
+                }
+                break;
+        }
+    }
+
+    private void OnFinalPartDestroyed(BossPhaseParts part)
+    {
+        Debug.Log("[BossManager] BOSS DOWN !");
+    }
 }

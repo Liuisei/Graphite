@@ -19,6 +19,11 @@ public class ThunderSettings : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //damage
+        IHasHp target = other.GetComponent<IHasHp>();
+        if (target != null && target.TeamID == 1) // player ID
+        {
+            target.TakeDamage(damage, gameObject); // Attacker
+        }
+        Destroy(gameObject);
     }
 }

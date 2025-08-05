@@ -7,7 +7,7 @@ public class BossPhaseParts : MonoBehaviour, IHasHp
 
     public int HP => currentHP;
     public int MaxHP => maxHP;
-    public int TeamID => 1; 
+    public int TeamID => 3; 
 
     public event System.Action OnHPChanged;
     public event System.Action<BossPhaseParts> OnDestroyed;
