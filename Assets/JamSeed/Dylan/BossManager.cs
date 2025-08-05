@@ -26,7 +26,7 @@ public class BossManager : MonoBehaviour
     public float thunderWarningTime = 3f;
     public float thunderRate = 5f;
     public float thunderTimer = 0f;
-    public AudioClip thunder;
+    public AudioClip thunderClip;
 
 
     private bool hasEntered = false;
@@ -114,23 +114,28 @@ public class BossManager : MonoBehaviour
     private IEnumerator ThunderAttackCoroutine()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
-
         if (player == null) yield break;
 
-        Vector3 dir = (player.transform.position - thunderFirePoint.position).normalized;
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        Vector3 start = thunderFirePoint.position;
+        Vector3 end = player.transform.position;
+        Vector3 direction = (end - start).normalized;
+        float distance = Vector3.Distance(start, end);
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         Quaternion rotation = Quaternion.Euler(0, 0, angle);
 
-        //Step 1 : Warning
-        GameObject preview = Instantiate(thunderWarningPrefab, thunderFirePoint.position, rotation);
-        Destroy(preview, thunderWarningTime);
+        // Step 1: Warning
+        GameObject warning = Instantiate(thunderWarningPrefab, start, rotation);
+        // Ajuste la scale du warning (par exemple sur l'axe X si ton prefab est aligné horizontalement)
+        warning.transform.localScale = new Vector3(distance, 1, 1);
+        Destroy(warning, thunderWarningTime);
 
         yield return new WaitForSeconds(thunderWarningTime);
 
-        //Step 2 : Thunder
-        SoundManager.Instance.PlaySe(thunder);
-        Instantiate(thunderPrefab, thunderFirePoint.position, rotation);
-
+        // Step 2: Thunder
+        SoundManager.Instance.PlaySe(thunderClip);
+        GameObject thunder = Instantiate(thunderPrefab, start, rotation);
+        thunder.transform.localScale = new Vector3(distance, 1, 1);
     }
+
 
 }
