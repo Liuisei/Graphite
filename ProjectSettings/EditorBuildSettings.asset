@@ -8,10 +8,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/JamSeed/Scenes/TestScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 1
+  - enabled: 0
     path: Assets/JamSeed/Scenes/2Title.unity
     guid: 23e17b3b2a9173c44804bcf6a2d680a2
-  - enabled: 1
+  - enabled: 0
     path: Assets/JamSeed/Scenes/4InGame2D.unity
     guid: bdd1f5bdc50cdff4baadf560a2c3c556
   m_configObjects:

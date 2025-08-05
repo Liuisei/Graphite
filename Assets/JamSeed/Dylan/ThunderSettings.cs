@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ThunderSettings : MonoBehaviour
 {
-    public float duration = 1f;
+    public float duration = 5f;
     public int damage = 10;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

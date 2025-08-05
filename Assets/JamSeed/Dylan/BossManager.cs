@@ -20,14 +20,13 @@ public class BossManager : MonoBehaviour
     public AudioClip houdan;
 
     [Header("Thunder")]
-    public GameObject thunderWarningPrefab;
     public GameObject thunderPrefab;
     public Transform thunderFirePoint;
     public float thunderWarningTime = 3f;
+    public float thunderSpeed = 15f;        // vitesse de l'éclair une fois lancé
     public float thunderRate = 5f;
     public float thunderTimer = 0f;
     public AudioClip thunderClip;
-
 
     private bool hasEntered = false;
     private float direction = -1f;
@@ -111,32 +110,58 @@ public class BossManager : MonoBehaviour
         StartCoroutine(ThunderAttackCoroutine());
     }
 
+
+
     private IEnumerator ThunderAttackCoroutine()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player == null) yield break;
 
-        Vector3 start = thunderFirePoint.position;
-        Vector3 end = player.transform.position;
-        Vector3 direction = (end - start).normalized;
-        float distance = Vector3.Distance(start, end);
-        float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-        Quaternion rotation = Quaternion.Euler(0, 0, angle);
+        GameObject thunder = Instantiate(thunderPrefab, thunderFirePoint.position, Quaternion.identity);
 
+        // On ne touche pas à la rotation Z ici, c'est dans l'enfant Visual dans le prefab
+        // thunder.transform.rotation = Quaternion.Euler(0f, 0f, -90f); // <-- supprimé
 
-        // Step 1: Warning
-        GameObject warning = Instantiate(thunderWarningPrefab, start, rotation);
-        // Ajuste la scale du warning (par exemple sur l'axe X si ton prefab est aligné horizontalement)
-        warning.transform.localScale = new Vector3(distance, 1, 1);
-        Destroy(warning, thunderWarningTime);
+        float timer = 0f;
+        Vector3 targetPos = Vector3.zero;
 
-        yield return new WaitForSeconds(thunderWarningTime);
+        while (timer < thunderWarningTime)
+        {
+            if (player != null)
+            {
+                targetPos = player.transform.position;
+                thunder.transform.position = thunderFirePoint.position;
 
-        // Step 2: Thunder
-        SoundManager.Instance.PlaySe(thunderClip);
-        GameObject thunder = Instantiate(thunderPrefab, start, rotation);
-        thunder.transform.localScale = new Vector3(distance, 1, 1);
+                Vector3 dir = targetPos - thunder.transform.position;
+                dir.y = 0f; // On veut rotation horizontale uniquement
+
+                if (dir.sqrMagnitude > 0.001f)
+                {
+                    float baseRotationY = -79f; // Valeur à ajuster selon ce que tu trouves dans le prefab
+
+                    float angleY = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
+                    float correctedY = angleY - baseRotationY;
+
+                    thunder.transform.rotation = Quaternion.Euler(0f, correctedY, -90f);
+                }
+            }
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        Vector3 launchDir = (targetPos - thunder.transform.position).normalized;
+
+        while (true)
+        {
+            thunder.transform.position += launchDir * thunderSpeed * Time.deltaTime;
+            yield return null;
+
+            if (Vector3.Distance(thunderFirePoint.position, thunder.transform.position) > 50f)
+            {
+                Destroy(thunder);
+                yield break;
+            }
+        }
     }
-
 
 }

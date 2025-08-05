@@ -275,7 +275,7 @@ GameObject:
   - component: {fileID: 136593107}
   m_Layer: 0
   m_Name: PlayerSpawnPoint
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -342,7 +342,7 @@ Transform:
   m_GameObject: {fileID: 136593106}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.12, y: 1.06, z: -1.42}
+  m_LocalPosition: {x: -7.45, y: 1.06, z: -1.42}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -481,7 +481,7 @@ GameObject:
   - component: {fileID: 500357870}
   - component: {fileID: 500357869}
   - component: {fileID: 500357868}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: Sea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -516,11 +516,11 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -766,10 +766,54 @@ PrefabInstance:
       propertyPath: m_Name
       value: sisaku bosu
       objectReference: {fileID: 0}
+    - target: {fileID: 2371442425075018234, guid: a80a98702332cd54f91dbd83af7774f1, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2924968853130277395, guid: a80a98702332cd54f91dbd83af7774f1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2924968853130277395, guid: a80a98702332cd54f91dbd83af7774f1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2924968853130277395, guid: a80a98702332cd54f91dbd83af7774f1, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2924968853130277395, guid: a80a98702332cd54f91dbd83af7774f1, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2924968853130277395, guid: a80a98702332cd54f91dbd83af7774f1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5438364380294492348, guid: a80a98702332cd54f91dbd83af7774f1, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5483354523737098900, guid: a80a98702332cd54f91dbd83af7774f1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.394
+      objectReference: {fileID: 0}
+    - target: {fileID: 5483354523737098900, guid: a80a98702332cd54f91dbd83af7774f1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5483354523737098900, guid: a80a98702332cd54f91dbd83af7774f1, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5483354523737098900, guid: a80a98702332cd54f91dbd83af7774f1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9196079897720200449, guid: a80a98702332cd54f91dbd83af7774f1, type: 3}
-      propertyPath: thunderWarningPrefab
+      propertyPath: thunderPrefab
       value: 
-      objectReference: {fileID: 2442450322440013256, guid: a0675471a318d504a8c0d07035a4b659, type: 3}
+      objectReference: {fileID: 2664846583307324973, guid: 63858d346ef25064ba1014f680167f85, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -784,7 +828,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1593255505}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: BG
   m_TagString: Untagged
   m_Icon: {fileID: 0}

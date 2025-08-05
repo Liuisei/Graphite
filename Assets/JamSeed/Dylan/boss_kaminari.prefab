@@ -10,27 +10,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: a60f309d54d2f3e428e95c3473a3ca8a, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a60f309d54d2f3e428e95c3473a3ca8a, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a60f309d54d2f3e428e95c3473a3ca8a, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a60f309d54d2f3e428e95c3473a3ca8a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.6456
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a60f309d54d2f3e428e95c3473a3ca8a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 7.0774
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a60f309d54d2f3e428e95c3473a3ca8a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -11.688569
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a60f309d54d2f3e428e95c3473a3ca8a, type: 3}
       propertyPath: m_LocalRotation.w
@@ -42,11 +42,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a60f309d54d2f3e428e95c3473a3ca8a, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a60f309d54d2f3e428e95c3473a3ca8a, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a60f309d54d2f3e428e95c3473a3ca8a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -62,7 +62,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a60f309d54d2f3e428e95c3473a3ca8a, type: 3}
       propertyPath: m_ConstrainProportionsScale
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: a60f309d54d2f3e428e95c3473a3ca8a, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5057a1679b8d9be4cbf2399b364e05de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 1
+  duration: 5
   damage: 10
 --- !u!65 &-7400937958003383819
 BoxCollider:
