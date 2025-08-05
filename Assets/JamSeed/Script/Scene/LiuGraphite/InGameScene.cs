@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using JamSeed.Foundation;
 using System;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEditor.SearchService;
 using UnityEngine;
@@ -57,7 +58,22 @@ public class InGameScene : SceneSingleton<InGameScene>
         InputActions.Player.Attack.performed += _ => isFiring = true;
         InputActions.Player.Attack.canceled += _ => isFiring = false;
 
+        HelthCloneCoolD().Forget();
+    }
 
+    private async UniTaskVoid HelthCloneCoolD()
+    {
+        await UniTask.Delay(100);
+        if (_playerDataLiu.cloneCurrentTime < _playerDataLiu.cloneCooldownTime)
+        {
+            _playerDataLiu.cloneCurrentTime += 0.1f;
+        }
+        else
+        {
+            _playerDataLiu.cloneCurrentTime = _playerDataLiu.cloneCooldownTime;
+        }
+        _playerDataLiu.OnPlayerDataChanged?.Invoke();
+        HelthCloneCoolD().Forget();
     }
     private async UniTaskVoid GameStart()
     {
@@ -91,6 +107,15 @@ public class InGameScene : SceneSingleton<InGameScene>
 
     public void CLonePlayer()
     {
+        if (_playerDataLiu.cloneCurrentTime < _playerDataLiu.cloneCooldownTime)
+        {
+            Debug.Log("クローンできない");
+            return;
+        }
+        else
+        {
+            _playerDataLiu.cloneCurrentTime = 0f; // クールダウンをリセット
+        }
         PlayerCont player = Instantiate(_playerPrefab, _playerSpawnPoint);
         player.playerMovement.IsMove = true;
         currentplayer.playerMovement.IsMove = false; // 元のプレイヤーは動かない
