@@ -45,11 +45,11 @@ public class InGameScene : SceneSingleton<InGameScene>
 
     public PlayerDataLiu _playerDataLiu = new PlayerDataLiu();
 
-    public PlayerCont _currentPlayerCont;
 
     public Action fireAction;
     private void Start()
     {
+        Debug.LogWarning("InGameScene Start");
         GameStart().Forget();
         InputActions.Player.Jump.performed += _ => CLonePlayer();
 
