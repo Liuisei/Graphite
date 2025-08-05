@@ -52,7 +52,7 @@ public class Player2D : MonoBehaviour
         controls.Player.Jump.performed += ctx =>
         {
             SpawnClone();
-            ActivateBarrier(); // ジャンプでバリア発動（テスト用）
+          
         };
     }
 
@@ -158,6 +158,10 @@ public class Player2D : MonoBehaviour
 
             // バリアがなければダメージを受ける
             //TakeDamage(1);
+        }
+        if (other.CompareTag("item"))
+        {
+            ActivateBarrier();
         }
     }
 
