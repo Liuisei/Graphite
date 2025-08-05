@@ -638,6 +638,11 @@ MonoBehaviour:
     speed: 5
     lifeTime: 10
     spawnWeight: 100
+  - prefab: {fileID: 5731114091643018047, guid: 3dec645205615f042aee133e9734b5f2, type: 3}
+    itemName: "\u30EC\u30D9\u30EB\u30A2\u30C3\u30D7"
+    speed: 5
+    lifeTime: 10
+    spawnWeight: 100
   spawnArea: {fileID: 1316363455}
   spawnInterval: 1
   spawnAreaSize: {x: 0, y: -0.15, z: 14}

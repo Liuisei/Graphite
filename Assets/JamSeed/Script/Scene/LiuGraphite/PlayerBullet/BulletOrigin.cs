@@ -76,7 +76,6 @@ public class BulletOrigin : MonoBehaviour, IHasHp
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log($"Bullet collided with: {other.gameObject.name}");
         // IHasHpインターフェースを持つオブジェクトかチェック
         IHasHp target = other.GetComponent<IHasHp>();
 
