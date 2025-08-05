@@ -1,13 +1,16 @@
+using JamSeed.Runtime;
 using UnityEngine;
 
 public class LevelUp : MonoBehaviour
 {
     [SerializeField] private int increaseAmount = 1;
+    [SerializeField] AudioClip[] AudioClips;   
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player"))
             return;
 
+        SoundManager.Instance.PlaySe(AudioClips[0]);
         var data = InGameScene.Instance._playerDataLiu;
 
         // 現在のレベルを取得
