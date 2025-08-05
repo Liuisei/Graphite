@@ -7,6 +7,19 @@ using UnityEditor.SearchService;
 using UnityEngine;
 public class InGameScene : SceneSingleton<InGameScene>
 {
+    public InputSystem_Actions InputActions { get; private set; }
+
+    private void Awake()
+    {
+        InputActions = new InputSystem_Actions();
+        InputActions.Enable();
+    }
+
+    private void OnDestroy()
+    {
+        InputActions.Disable();
+    }
+
 
     public Transform _playerSpawnPoint;
     public GameObject _playerPrefab;
@@ -61,6 +74,12 @@ public class InGameScene : SceneSingleton<InGameScene>
     {
         BossCont newBossCont = Instantiate(BossCont, _enemySpawnPoint);
         newBossCont.bossMove.SetTarget(MoveRangeA, MoveRangeB);
+    }
+
+
+    public void CLonePlayer()
+    {
+        _player = Instantiate(_playerPrefab, _playerSpawnPoint).GetComponent<PlayerMovement>();
     }
 
 
