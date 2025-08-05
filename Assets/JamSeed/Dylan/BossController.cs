@@ -11,6 +11,7 @@ public class BossController : MonoBehaviour, IHasHp
     public float startReturnY = 5f;
 
     [SerializeField] private int maxHP = 100;
+    public BossHP bossHP;
     private int currentHP;
 
     public int HP => currentHP;
@@ -19,6 +20,7 @@ public class BossController : MonoBehaviour, IHasHp
     public void ChangeHP(int amount, GameObject attacker)
     {
         currentHP = Mathf.Clamp(currentHP + amount, 0, maxHP);
+        bossHP.UpdateHPBar();
     }
 
     public event Action OnHPChanged;
