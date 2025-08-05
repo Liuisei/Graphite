@@ -32,7 +32,7 @@ public class Weapon : MonoBehaviour
             return;
         }
 
-        hp.TakeDamage(baseDamage,target);
+        hp.ChangeHP(baseDamage,target);
     }
 
 

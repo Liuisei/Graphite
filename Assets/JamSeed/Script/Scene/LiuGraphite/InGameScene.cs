@@ -87,93 +87,36 @@ public class InGameScene : SceneSingleton<InGameScene>
 }
 
 
+
 public class PlayerDataLiu
 {
-    // ===== イベント =====
-    public event Action<PlayerLevel> OnPlayerLevelChanged;
-    public event Action<PlayerState> OnPlayerStateChanged;
-    public event Action<float> OnCloneCurrentTimeChanged;
-    public event Action<float> OnFibarCloneCurrentTimeChanged;
-    public event Action<int> OnMaxPlayerHPChanged;
-    public event Action<int> OnCurrentPlayerHPChanged;
-
     // ===== フィールド =====
-    private PlayerLevel _playerLevel = PlayerLevel.Lv1;
-    private PlayerState _playerState = PlayerState.normal;
-    public float _cloneCooldownTime = 5f;
-    private float _cloneCurrentTime = 0f;
-    public float _fibarCloneCooldownTime = 2f;
-    private float _fibarCloneCurrentTime = 0f;
-    public int _maxPlayerHP = 10;
-    private int _currentPlayerHP = 10;
+    public PlayerLevel playerLevel = PlayerLevel.Lv1;
+    public PlayerState playerState = PlayerState.normal;
 
-    // ===== プロパティ =====
-    public PlayerLevel Level
-    {
-        get => _playerLevel;
-        set
-        {
-            if (_playerLevel != value)
-            {
-                _playerLevel = value;
-                OnPlayerLevelChanged?.Invoke(value);
-            }
-        }
-    }
+    public float cloneCooldownTime = 5f;
+    public float cloneCurrentTime = 0f;
 
-    public PlayerState State
-    {
-        get => _playerState;
-        set
-        {
-            if (_playerState != value)
-            {
-                _playerState = value;
-                OnPlayerStateChanged?.Invoke(value);
-            }
-        }
-    }
+    public float fibarCloneCooldownTime = 2f;
+    public float fibarCloneCurrentTime = 0f;
 
+    public int maxPlayerHP = 10;
 
-
-    public float CloneCurrentTime
-    {
-        get => _cloneCurrentTime;
-        set
-        {
-            if (Math.Abs(_cloneCurrentTime - value) > float.Epsilon)
-            {
-                _cloneCurrentTime = value;
-                OnCloneCurrentTimeChanged?.Invoke(value);
-            }
-        }
-    }
-
-    public float FibarCloneCurrentTime
-    {
-        get => _fibarCloneCurrentTime;
-        set
-        {
-            if (Math.Abs(_fibarCloneCurrentTime - value) > float.Epsilon)
-            {
-                _fibarCloneCurrentTime = value;
-                OnFibarCloneCurrentTimeChanged?.Invoke(value);
-            }
-        }
-    }
-
+    private int _currentPlayerHP = 10; // 内部値
     public int CurrentPlayerHP
     {
         get => _currentPlayerHP;
         set
         {
-            if (_currentPlayerHP != value)
+            int clamped = Math.Clamp(value, 0, maxPlayerHP); // 0〜maxPlayerHP に制限
+            if (_currentPlayerHP != clamped)
             {
-                _currentPlayerHP = value;
-                OnCurrentPlayerHPChanged?.Invoke(value);
+                _currentPlayerHP = clamped;
             }
         }
     }
+
+    public Action OnPlayerDataChanged;
 
     // ===== 列挙型 =====
     public enum PlayerState
@@ -189,4 +132,5 @@ public class PlayerDataLiu
         Lv3,
     }
 }
+
 

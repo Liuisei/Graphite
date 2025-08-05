@@ -102,9 +102,11 @@ GameObject:
   - component: {fileID: 305514403839773625}
   - component: {fileID: 3521733821420186643}
   - component: {fileID: 3543827618957496907}
+  - component: {fileID: -1369498068556191998}
+  - component: {fileID: 6447657295422889513}
   m_Layer: 0
   m_Name: PlayerLiu
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -205,7 +207,7 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 2
+  m_Height: 1.12
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &7871005698870784439
@@ -281,7 +283,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 8776137771757864978, guid: bb2bd356738da3649813a4b8ffacb216, type: 3}
   speed: 10
   damage: 20
-  bulletPrefab2: {fileID: 0}
+  bulletPrefab2: {fileID: 7804509783788492117, guid: 91bae1ce05594f24092567d79292b846, type: 3}
   firepoint: {fileID: 5130904200327029768}
   fireVectals:
   - {fileID: 8040266039005784166}
@@ -290,6 +292,40 @@ MonoBehaviour:
   - {fileID: 7090126223155944583}
   - {fileID: 7231653029036900605}
   weaponLevel: 0
+--- !u!114 &-1369498068556191998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3618095286524062105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eba836fe2f1b3c4499c131baf74a7daa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  teamId: 0
+--- !u!65 &6447657295422889513
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3618095286524062105}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.0000002, y: 1.98, z: 2.21}
+  m_Center: {x: 0, y: 0.34, z: 0}
 --- !u!1 &3655325201224521573
 GameObject:
   m_ObjectHideFlags: 0
@@ -674,7 +710,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6347299631173477493}
-  m_Mesh: {fileID: -8545447256379345787, guid: 3091a5c3ba14f6e449cdea733fe201af, type: 3}
+  m_Mesh: {fileID: -8545447256379345787, guid: faa9cbc1d1053544895b3690d09b195c, type: 3}
 --- !u!23 &2908982613395680890
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -698,7 +734,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 8609422240307493162, guid: 3091a5c3ba14f6e449cdea733fe201af, type: 3}
+  - {fileID: 8609422240307493162, guid: faa9cbc1d1053544895b3690d09b195c, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1069,15 +1105,23 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: 3c43ac49eb56f714db6b98c8c2d38d93, type: 3}
     - target: {fileID: 1052926160104044990, guid: 65ab11fa771d75347a7d634834955a68, type: 3}
       propertyPath: m_FillAmount
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1052926160104044990, guid: 65ab11fa771d75347a7d634834955a68, type: 3}
       propertyPath: m_FillMethod
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 5525382682203918128, guid: 65ab11fa771d75347a7d634834955a68, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 6251919060052485692, guid: 65ab11fa771d75347a7d634834955a68, type: 3}
       propertyPath: m_Name
       value: FaberGage
+      objectReference: {fileID: 0}
+    - target: {fileID: 6251919060052485692, guid: 65ab11fa771d75347a7d634834955a68, type: 3}
+      propertyPath: m_TagString
+      value: Gauge
       objectReference: {fileID: 0}
     - target: {fileID: 7667781812345720538, guid: 65ab11fa771d75347a7d634834955a68, type: 3}
       propertyPath: m_Pivot.x
@@ -1163,6 +1207,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 16e0265d70f88294594c67999c492231, type: 3}
+    - target: {fileID: 7977109915895962598, guid: 65ab11fa771d75347a7d634834955a68, type: 3}
+      propertyPath: m_FillAmount
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8366518668141379777, guid: 65ab11fa771d75347a7d634834955a68, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -1173,7 +1221,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8882220689100512669, guid: 65ab11fa771d75347a7d634834955a68, type: 3}
       propertyPath: m_Value
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8882220689100512669, guid: 65ab11fa771d75347a7d634834955a68, type: 3}
       propertyPath: m_Direction

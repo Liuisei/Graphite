@@ -1,204 +1,115 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class Player : MonoBehaviour
+public class InGameUIView : MonoBehaviour
 {
-    private InputSystem_Actions controls;
-    private Vector2 moveInput;
-    [SerializeField] float moveSpeed = 5f;
-    [SerializeField] GameObject bulletPrefab;
-    [SerializeField] Transform firePoint1;
-    [SerializeField] Transform firePoint2;
-    [SerializeField] Transform firePoint3;
-    [SerializeField] Transform firePoint4;
-    [SerializeField] Transform firePoint5;
-    [SerializeField] private Transform target;
-    [SerializeField] private Transform target1;
-    [SerializeField] private Transform target2;
-    [SerializeField] float shootInterval = 0.2f;
-    [SerializeField] private int level = 0;
-    [SerializeField] GameObject PlayerClone;
-    private int playerHp = 5;
+    [SerializeField] private Slider[] _hpbar;         // HPバーのスライダー配列（5個想定）
+    [SerializeField] private TextMeshProUGUI _LVText; // レベル表示用テキスト
 
-    [Header("バリア設定")]
-    [SerializeField] private GameObject barrierBlock; // バリアの見た目（Cube）
-    private bool isBarrierActive = false;
-    private float barrierDuration = 5f;
-    private float barrierTimer = 0f;
-    private int barrierHP = 3;
+    private const int MAX_HP_BARS = 5;       // HPバーの最大数
+    private const int HP_PER_FULL_BAR = 2;   // 1つのHPバーが表すHP量（2）
 
-    private bool isShooting = false;
-    private float shootTimer = 0f;
-
-    private void Awake()
+    void Start()
     {
-        controls = new InputSystem_Actions();
-
-        controls.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
-        controls.Player.Move.canceled += ctx => moveInput = Vector2.zero;
-
-        controls.Player.Attack.started += ctx =>
+        // 参照の安全チェックを行い、問題なければイベント登録とUI初期更新
+        if (ValidateReferences())
         {
-            isShooting = true;
-            shootTimer = 0f;
-        };
-
-        controls.Player.Attack.performed += ctx => Shoot();
-
-        controls.Player.Attack.canceled += ctx =>
-        {
-            isShooting = false;
-        };
-
-        controls.Player.Jump.performed += ctx =>
-        {
-            Instantiate(PlayerClone, transform.position, Quaternion.Euler(0f, -90f, 0f));
-            ActivateBarrier(); // ジャンプでバリア発動（テスト用）
-        };
-    }
-
-    private void OnEnable() => controls.Enable();
-    private void OnDisable() => controls.Disable();
-
-    private void Update()
-    {
-        Move();
-
-        if (isShooting)
-        {
-            shootTimer += Time.deltaTime;
-            if (shootTimer >= shootInterval)
-            {
-                shootTimer = 0f;
-                Shoot();
-            }
-        }
-
-        // バリア時間処理
-        if (isBarrierActive)
-        {
-            barrierTimer += Time.deltaTime;
-            if (barrierTimer >= barrierDuration)
-            {
-                DeactivateBarrier();
-            }
+            InGameScene.Instance._playerDataLiu.OnPlayerDataChanged += UpdateUI;
+            UpdateUI();
         }
     }
 
-    private void Move()
+    void OnDestroy()
     {
-        Vector3 move = new Vector3(moveInput.x, 0f, moveInput.y) * moveSpeed;
-        transform.position += move * Time.deltaTime;
-    }
-
-    public void Shoot()
-    {
-        GameObject bulletObj = Instantiate(bulletPrefab, firePoint1.position, firePoint1.rotation);
-        Bullet bullet = bulletObj.GetComponent<Bullet>();
-        if (bullet != null)
+        // イベントの登録解除（メモリリーク防止）
+        if (InGameScene.Instance != null && InGameScene.Instance._playerDataLiu != null)
         {
-            bullet.SetDirection(-firePoint1.forward);
-            Destroy(bulletObj, 5f);
-        }
-
-        GameObject bulletObj2 = Instantiate(bulletPrefab, firePoint2.position, firePoint2.rotation);
-        Bullet bullet2 = bulletObj2.GetComponent<Bullet>();
-        if (bullet2 != null)
-        {
-            bullet2.SetDirection(-firePoint2.forward);
-            Destroy(bulletObj2, 5f);
-        }
-
-        if (level == 1)
-        {
-            GameObject bulletObj3 = Instantiate(bulletPrefab, firePoint5.position, Quaternion.identity);
-            Bullet bullet3 = bulletObj3.GetComponent<Bullet>();
-            if (bullet3 != null)
-            {
-                Vector3 direction = -firePoint5.forward;
-                direction.y = 0;
-                direction.Normalize();
-                bullet3.SetDirection(direction);
-                Destroy(bulletObj3, 5f);
-            }
-
-            GameObject bulletObj4 = Instantiate(bulletPrefab, firePoint4.position, Quaternion.identity);
-            Bullet bullet4 = bulletObj4.GetComponent<Bullet>();
-            if (bullet4 != null)
-            {
-                Vector3 direction = (target1.position - firePoint4.position).normalized;
-                direction.y = 0;
-                bullet4.SetDirection(direction);
-                Destroy(bulletObj4, 5f);
-            }
-
-            GameObject bulletObj5 = Instantiate(bulletPrefab, firePoint5.position, Quaternion.identity);
-            Bullet bullet5 = bulletObj5.GetComponent<Bullet>();
-            if (bullet5 != null)
-            {
-                Vector3 direction = (target.position - firePoint5.position).normalized;
-                direction.y = 0;
-                bullet5.SetDirection(direction);
-                Destroy(bulletObj5, 5f);
-            }
-        }
-    }
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("EnemyBullet"))
-        {
-            TryBlockDamage();
-            if (!isBarrierActive)
-            {
-                playerHp--;
-                if (playerHp < 0)
-                {
-                    Debug.Log("ゲームオーバー");
-                }
-            }
-
-            // バリアがなければダメージを受ける
-            //TakeDamage(1);
+            InGameScene.Instance._playerDataLiu.OnPlayerDataChanged -= UpdateUI;
         }
     }
 
-    public void ActivateBarrier()
+    // 参照のnullチェックなどの検証処理
+    private bool ValidateReferences()
     {
-        isBarrierActive = true;
-        barrierTimer = 0f;
-        barrierHP = 3;
-
-        if (barrierBlock != null)
-            barrierBlock.SetActive(true); // 表示ON
-
-        Debug.Log("バリア発動！");
-    }
-
-    private void DeactivateBarrier()
-    {
-        isBarrierActive = false;
-
-        if (barrierBlock != null)
-            barrierBlock.SetActive(false); // 表示OFF
-
-        Debug.Log("バリア終了！");
-    }
-
-    public bool IsBarrierActive()
-    {
-        return isBarrierActive;
-    }
-
-    public bool TryBlockDamage()
-    {
-        if (isBarrierActive)
+        if (InGameScene.Instance == null)
         {
-            barrierHP--;
-            if (barrierHP <= 0)
-            {
-                DeactivateBarrier();
-            }
-            return true; // バリアでブロックした
+            Debug.LogError("InGameScene.Instance が null です！");
+            return false;
         }
-        return false; // バリアなし、ダメージ通す
+
+        if (InGameScene.Instance._playerDataLiu == null)
+        {
+            Debug.LogError("PlayerDataLiu が null です！");
+            return false;
+        }
+
+        if (_hpbar == null || _hpbar.Length != MAX_HP_BARS)
+        {
+            Debug.LogError($"HPバー配列は正確に {MAX_HP_BARS} 個必要です！");
+            return false;
+        }
+
+        if (_LVText == null)
+        {
+            Debug.LogError("レベル表示テキストが null です！");
+            return false;
+        }
+
+        return true;
+    }
+
+    // プレイヤーデータの変化に合わせてUI更新
+    private void UpdateUI()
+    {
+        if (!ValidateReferences()) return;
+
+        SetHPBar(InGameScene.Instance._playerDataLiu.CurrentPlayerHP);
+        SetLVText(InGameScene.Instance._playerDataLiu.playerLevel.ToString());
+    }
+
+    /// <summary>
+    /// HPバーを更新する（HPは0〜10）
+    /// 1バーあたり2HP：満タン＝2HP、半分＝1HP、空＝0HP
+    /// </summary>
+    /// <param name="hp">現在HP値</param>
+    public void SetHPBar(int hp)
+    {
+        Debug.Log($"SetHPBar: {hp}");
+
+        // HPを0〜最大HP範囲に制限
+        hp = Mathf.Clamp(hp, 0, MAX_HP_BARS * HP_PER_FULL_BAR);
+
+        int fullHeartCount = hp / HP_PER_FULL_BAR;  // 満タンバーの数
+        int halfHeartCount = hp % HP_PER_FULL_BAR;  // 半分バーの数（0か1）
+        int i = 0;
+
+        // 満タンバーを設定
+        for (; i < fullHeartCount && i < MAX_HP_BARS; i++)
+        {
+            _hpbar[i].value = 1f;
+        }
+
+        // 半分バーを設定
+        if (halfHeartCount > 0 && i < MAX_HP_BARS)
+        {
+            _hpbar[i].value = 0.5f;
+            i++;
+        }
+
+        // 残りのバーは空に設定
+        for (; i < MAX_HP_BARS; i++)
+        {
+            _hpbar[i].value = 0f;
+        }
+    }
+
+    // レベルテキストをセット
+    public void SetLVText(string lv)
+    {
+        if (_LVText != null)
+        {
+            _LVText.text = $"LV {lv}";
+        }
     }
 }
