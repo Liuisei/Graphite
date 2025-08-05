@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: OceanMaterial
-  m_Shader: {fileID: 4800000, guid: e4097b28b12f4834298d738ceff316a5, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 8d68421809d1b194bb9f3c1d08b64e9b, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -149,10 +149,12 @@ Material:
     - _Effectivity: 0.5
     - _EnableExternalAlpha: 0
     - _EnvironmentReflections: 1
-    - _FoamAmount: 0.5
+    - _FoamAmount: -0.05
+    - _FoamCutOut: 1.89
     - _FoamCutoff: 0.8
+    - _FoamScale: 101.21
     - _FoamSoftness: 0.1
-    - _FoamSpeed: 2.2
+    - _FoamSpeed: 1.77
     - _FoamSpread: 2
     - _FresnelBias: 0.02
     - _FresnelPower: 3
@@ -175,11 +177,15 @@ Material:
     - _NormalStrength: 1
     - _OcclusionStrength: 1
     - _Parallax: 0.005
+    - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _ReflectionDistortion: 0.02
     - _ReflectionStrength: 0.5
     - _RefractionStrength: 0.03
+    - _RefrectionScale: 1.72
+    - _RefrectionSpeed: 1.87
+    - _RefrectionStrength: 1.96
     - _Roughness: 0.02
     - _Scale: 1.5
     - _ScaleCompensation: 1
@@ -202,6 +208,7 @@ Material:
     - _TimeOffset: 0
     - _TimeScale: 1
     - _Transparency: 0.8
+    - _WaterDepth: 1.81
     - _Wave2Frequency: 0.9
     - _Wave2Height: 0.6
     - _Wave2Speed: 0.3
@@ -226,6 +233,7 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DeepColor: {r: 0.09999997, g: 0.29999998, b: 0.6, a: 1}
+    - _DeepWaterColor: {r: 0, g: 0.51519233, b: 0.9245283, a: 0}
     - _DirectionA: {r: 0.47, g: 0.35, b: -0.96, a: 0.23}
     - _DirectionB: {r: 0.77, g: -1.47, b: -0.3, a: -0.2}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
@@ -235,6 +243,7 @@ Material:
     - _HorizonColor: {r: 0.29999998, g: 0.7, b: 0.9, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _ShallowColor: {r: 0.39999998, g: 0.8, b: 1, a: 0.8}
+    - _ShallowWaterColor: {r: 0, g: 0.6696258, b: 1, a: 0}
     - _Spec: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _Speed: {r: 20, g: 30, b: 10, a: 30}
