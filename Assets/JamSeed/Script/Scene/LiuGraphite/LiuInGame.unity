@@ -497,7 +497,7 @@ GameObject:
   - component: {fileID: 1316363455}
   - component: {fileID: 1316363454}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Item
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -518,6 +518,11 @@ MonoBehaviour:
   itemTypes:
   - prefab: {fileID: 5731114091643018047, guid: a122d847a18fb654d90921a2c6e8c5f9, type: 3}
     itemName: "\u30B2\u30FC\u30B8\u30A2\u30C3\u30D7"
+    speed: 5
+    lifeTime: 10
+    spawnWeight: 100
+  - prefab: {fileID: 5731114091643018047, guid: 746003ab75d3bb8478d80996858c10b6, type: 3}
+    itemName: "\u30EC\u30D9\u30EB\u30A2\u30C3\u30D7"
     speed: 5
     lifeTime: 10
     spawnWeight: 100
