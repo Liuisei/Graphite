@@ -118,6 +118,7 @@ public class InGameScene : SceneSingleton<InGameScene>
         }
         PlayerCont player = Instantiate(_playerPrefab, _playerSpawnPoint);
         player.playerMovement.IsMove = true;
+        Destroy(currentplayer.gameObject, 5f);
         currentplayer.playerMovement.IsMove = false; // 元のプレイヤーは動かない
         currentplayer = player; // 新しいプレイヤーを現在のプレイヤーとして設定
     }
