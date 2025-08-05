@@ -1,6 +1,4 @@
-using DG.Tweening;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GaugeUp : MonoBehaviour
 {
@@ -14,29 +12,6 @@ public class GaugeUp : MonoBehaviour
 
         InGameScene.Instance._playerDataLiu.fibarCloneCurrentTime += increaseAmount;
         InGameScene.Instance._playerDataLiu.OnPlayerDataChanged.Invoke();
-
-        // foreach (Transform child in other.transform.GetComponentsInChildren<Transform>())
-        // {
-        //     if (child.CompareTag("Gauge"))
-        //     {
-        //         Slider gaugeSlider = child.GetComponent<Slider>();
-        //         if (gaugeSlider != null)
-        //         {
-        //             float targetValue = Mathf.Clamp01(gaugeSlider.value + increaseAmount);
-        //
-        //             // DOTweenでスムーズにスライダーを増加
-        //             gaugeSlider.DOValue(targetValue, tweenDuration).SetEase(Ease.OutCubic);
-        //
-        //             Destroy(gameObject);
-        //             return;
-        //         }
-        //         else
-        //         {
-        //             Debug.LogWarning("Gauge タグはあるが Slider コンポーネントが見つかりませんでした。");
-        //         }
-        //     }
-        // }
-        //
-        // Debug.LogWarning("Player の子オブジェクトに Gauge タグが見つかりませんでした。");
+        Destroy(gameObject);
     }
 }
