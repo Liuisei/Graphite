@@ -18,7 +18,7 @@ public class BossController : MonoBehaviour, IHasHp
     public int TeamID => 3; // チームID
     public void ChangeHP(int amount, GameObject attacker)
     {
-        throw new NotImplementedException();
+        currentHP = Mathf.Clamp(currentHP + amount, 0, maxHP);
     }
 
     public event Action OnHPChanged;
