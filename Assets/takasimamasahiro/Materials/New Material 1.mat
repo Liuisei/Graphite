@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: New Material 1
-  m_Shader: {fileID: -6465566751694194690, guid: ec36c1d44fe5dd644a2eeca37ab39217, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 8d68421809d1b194bb9f3c1d08b64e9b, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -126,9 +126,9 @@ Material:
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
-    - _FoamAmount: 2.35
-    - _FoamCutOut: 2
-    - _FoamScale: 100
+    - _FoamAmount: 1.85
+    - _FoamCutOut: 0.9
+    - _FoamScale: 100.7
     - _FoamSpeed: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
@@ -143,9 +143,9 @@ Material:
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _Reflectivity: 5
-    - _RefrectionScale: 2.74
-    - _RefrectionSpeed: 0.07
-    - _RefrectionStrength: 4.64
+    - _RefrectionScale: 3.1
+    - _RefrectionSpeed: 1
+    - _RefrectionStrength: 18.46
     - _ScaleRatioA: 0
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
@@ -156,7 +156,7 @@ Material:
     - _Surface: 0
     - _UnderlayDilate: 0
     - _UnderlaySoftness: 0
-    - _WaterDepth: 1.69
+    - _WaterDepth: 10000
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
