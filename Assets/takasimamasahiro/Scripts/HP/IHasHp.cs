@@ -10,6 +10,5 @@ public interface IHasHp
     void TakeDamage(int amount , GameObject attacker);//攻撃者の情報付き
     void Heal(int amount);
 
-
     event System.Action OnHPChanged;
 }
