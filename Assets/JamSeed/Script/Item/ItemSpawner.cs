@@ -10,7 +10,7 @@ using UnityEngine;
         public GameObject prefab;              // アイテムプレハブ
         public string itemName;                // アイテム名（デバッグ用）
         public float speed = 5f;               // 移動速度
-        public float lifeTime = 10f;           // 生存時間
+        public float lifeTime = 20f;           // 生存時間
 
         [Header("スポーン確率")]
         [Range(0f, 100f)]
