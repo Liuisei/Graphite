@@ -1,13 +1,15 @@
 using Cysharp.Threading.Tasks;
 using JamSeed.Foundation;
 using System;
-using System.Diagnostics;
 using TMPro;
 using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.Windows;
 public class InGameScene : SceneSingleton<InGameScene>
 {
     public InputSystem_Actions InputActions { get; private set; }
+
+    private bool isFiring;
 
     private void Awake()
     {
@@ -22,8 +24,8 @@ public class InGameScene : SceneSingleton<InGameScene>
 
 
     public Transform _playerSpawnPoint;
-    public GameObject _playerPrefab;
-    private PlayerMovement _player;
+    public PlayerCont _playerPrefab;
+    private PlayerCont currentplayer;
 
 
     public Transform _enemySpawnPoint;
@@ -43,10 +45,19 @@ public class InGameScene : SceneSingleton<InGameScene>
 
     public PlayerDataLiu _playerDataLiu = new PlayerDataLiu();
 
+    public PlayerCont _currentPlayerCont;
 
+    public Action fireAction;
     private void Start()
     {
         GameStart().Forget();
+        InputActions.Player.Jump.performed += _ => CLonePlayer();
+
+
+        InputActions.Player.Attack.performed += _ => isFiring = true;
+        InputActions.Player.Attack.canceled += _ => isFiring = false;
+
+
     }
     private async UniTaskVoid GameStart()
     {
@@ -62,12 +73,13 @@ public class InGameScene : SceneSingleton<InGameScene>
         _gameStateText.text = "Go!";
         await UniTask.Delay(1000);
         _gameStateText.text = "";
-        _player.IsMove = true;
+        currentplayer.playerMovement.IsMove = true;
     }
 
     private void PlayerSpawn()
     {
-        _player = Instantiate(_playerPrefab, _playerSpawnPoint).GetComponent<PlayerMovement>();
+        PlayerCont playerC = Instantiate(_playerPrefab, _playerSpawnPoint);
+        currentplayer = playerC;
     }
 
     private void EnemySpawn()
@@ -79,11 +91,24 @@ public class InGameScene : SceneSingleton<InGameScene>
 
     public void CLonePlayer()
     {
-        _player = Instantiate(_playerPrefab, _playerSpawnPoint).GetComponent<PlayerMovement>();
+        PlayerCont player = Instantiate(_playerPrefab, _playerSpawnPoint);
+        player.playerMovement.IsMove = true;
+        currentplayer.playerMovement.IsMove = false; // 元のプレイヤーは動かない
+        currentplayer = player; // 新しいプレイヤーを現在のプレイヤーとして設定
     }
 
+    private float nextFireTime;
+    [SerializeField] private float fireCooldown = 0.2f;
 
-
+    private void FixedUpdate()
+    {
+        if (isFiring && Time.time >= nextFireTime)
+        {
+            Debug.Log("Player Fireaaa");
+            fireAction.Invoke();
+            nextFireTime = Time.time + fireCooldown;
+        }
+    }
     private enum SceneState
     {
         None,

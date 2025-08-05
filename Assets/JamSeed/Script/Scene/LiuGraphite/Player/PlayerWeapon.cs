@@ -13,9 +13,18 @@ public class PlayerWeapon : MonoBehaviour
 
     public WeaponLevel weaponLevel = WeaponLevel.Bullet;
 
+    private void Start()
+    {
+        InGameScene.Instance.fireAction += PlayerFire;
+    }
+    private void OnDestroy()
+    {
+        InGameScene.Instance.fireAction -= PlayerFire;
+    }
 
     public void PlayerFire()
     {
+        Debug.Log("PlayerFire");
         switch (weaponLevel)
         {
             case WeaponLevel.Bullet:

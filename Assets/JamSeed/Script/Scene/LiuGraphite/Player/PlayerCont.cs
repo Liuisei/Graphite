@@ -5,16 +5,13 @@ using UnityEngine.UI;
 
 public class PlayerCont : MonoBehaviour
 {
-    [SerializeField] PlayerMovement playerMovement;
-    [SerializeField] PlayerWeapon playerWeapon;
+    public PlayerMovement playerMovement;
+    public PlayerWeapon playerWeapon;
 
     //ui
-    [SerializeField] Slider sliderClone;
-    [SerializeField] Slider sliderFebarl;
+    public Slider sliderClone;
+    public Slider sliderFebarl;
 
-    private void Start()
-    {
-        playerMovement.onFire += playerWeapon.PlayerFire;
-    }
+    
 
 }
