@@ -106,7 +106,7 @@ GameObject:
   - component: {fileID: 6447657295422889513}
   m_Layer: 0
   m_Name: PlayerLiu
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1105,15 +1105,23 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: 3c43ac49eb56f714db6b98c8c2d38d93, type: 3}
     - target: {fileID: 1052926160104044990, guid: 65ab11fa771d75347a7d634834955a68, type: 3}
       propertyPath: m_FillAmount
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1052926160104044990, guid: 65ab11fa771d75347a7d634834955a68, type: 3}
       propertyPath: m_FillMethod
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 5525382682203918128, guid: 65ab11fa771d75347a7d634834955a68, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 6251919060052485692, guid: 65ab11fa771d75347a7d634834955a68, type: 3}
       propertyPath: m_Name
       value: FaberGage
+      objectReference: {fileID: 0}
+    - target: {fileID: 6251919060052485692, guid: 65ab11fa771d75347a7d634834955a68, type: 3}
+      propertyPath: m_TagString
+      value: Gauge
       objectReference: {fileID: 0}
     - target: {fileID: 7667781812345720538, guid: 65ab11fa771d75347a7d634834955a68, type: 3}
       propertyPath: m_Pivot.x
@@ -1199,6 +1207,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 16e0265d70f88294594c67999c492231, type: 3}
+    - target: {fileID: 7977109915895962598, guid: 65ab11fa771d75347a7d634834955a68, type: 3}
+      propertyPath: m_FillAmount
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8366518668141379777, guid: 65ab11fa771d75347a7d634834955a68, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -1209,7 +1221,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8882220689100512669, guid: 65ab11fa771d75347a7d634834955a68, type: 3}
       propertyPath: m_Value
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8882220689100512669, guid: 65ab11fa771d75347a7d634834955a68, type: 3}
       propertyPath: m_Direction
