@@ -1,8 +1,10 @@
+using JamSeed.Runtime;
 using UnityEngine;
 
 public class Shield : MonoBehaviour
 {
     [SerializeField] private float _duration = 3f;
+    [SerializeField] private AudioClip _shieldSound;
     private float _currentTime;
 
     private void Start()
@@ -29,6 +31,7 @@ public class Shield : MonoBehaviour
     {
         if (other.CompareTag("EnemyBullet"))
         {
+            SoundManager.Instance.PlaySe(_shieldSound);
             Destroy(other.gameObject);
         }
     }

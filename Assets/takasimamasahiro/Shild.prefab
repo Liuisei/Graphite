@@ -122,3 +122,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _duration: 10
+  _shieldSound: {fileID: 8300000, guid: 1918ed6e428f5dc44b61be9e18f4f84c, type: 3}

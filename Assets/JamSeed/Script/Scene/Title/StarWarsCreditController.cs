@@ -1,16 +1,15 @@
 using Cysharp.Threading.Tasks;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class StarWarsCreditController : MonoBehaviour
 {
     [Header("UI References")]
-    [SerializeField] private TextMeshProUGUI _creditText;
+    [SerializeField] private Image _creditImage;   // ← Sprite表示用に変更
     [SerializeField] private Image _endImage;
 
     [Header("Credit Settings")]
-    [SerializeField] private string[] _creditNames;
+    [SerializeField] private Sprite[] _creditSprites;  // ← Sprite配列に変更
     [SerializeField] private float _scrollDistance = 100f;
     [SerializeField] private float _scrollDuration = 3f;
     [SerializeField] private float _delayBetweenCredits = 1f;
@@ -18,14 +17,14 @@ public class StarWarsCreditController : MonoBehaviour
 
     public async UniTaskVoid PlayCreditsAsync()
     {
-        _creditText.transform.localPosition = _startPosition;
+        _creditImage.transform.localPosition = _startPosition;
         _endImage.gameObject.SetActive(false);
-        _creditText.gameObject.SetActive(true);
+        _creditImage.gameObject.SetActive(true);
 
-        foreach (string creditName in _creditNames)
+        foreach (Sprite creditSprite in _creditSprites)
         {
-            _creditText.text = creditName;
-            _creditText.transform.localPosition = _startPosition;
+            _creditImage.sprite = creditSprite;
+            _creditImage.transform.localPosition = _startPosition;
 
             Vector3 targetPosition = _startPosition + new Vector3(0, 0, _scrollDistance);
 
@@ -33,7 +32,7 @@ public class StarWarsCreditController : MonoBehaviour
             while (elapsed < _scrollDuration)
             {
                 float t = elapsed / _scrollDuration;
-                _creditText.transform.localPosition = Vector3.Lerp(_startPosition, targetPosition, t);
+                _creditImage.transform.localPosition = Vector3.Lerp(_startPosition, targetPosition, t);
                 elapsed += Time.deltaTime;
                 await UniTask.Yield();
             }
@@ -41,8 +40,7 @@ public class StarWarsCreditController : MonoBehaviour
             await UniTask.Delay(System.TimeSpan.FromSeconds(_delayBetweenCredits));
         }
 
-        // 最後の演出
-        _creditText.gameObject.SetActive(false);
+        _creditImage.gameObject.SetActive(false);
         _endImage.gameObject.SetActive(true);
     }
 }
