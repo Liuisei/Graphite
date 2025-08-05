@@ -5,12 +5,9 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float fireCooldown = 0.2f;
 
     private Rigidbody rb;
     private Vector2 moveInput;
-    private bool isFiring;
-    private float nextFireTime;
 
     public Action onPlayerClone;
     public Action onFire;
@@ -29,11 +26,6 @@ public class PlayerMovement : MonoBehaviour
 
         input.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
         input.Player.Move.canceled += ctx => moveInput = Vector2.zero;
-
-        input.Player.Attack.performed += _ => isFiring = true;
-        input.Player.Attack.canceled += _ => isFiring = false;
-
-        input.Player.Jump.performed += _ => PlayerClone();
     }
 
     private void OnDisable()
@@ -44,9 +36,6 @@ public class PlayerMovement : MonoBehaviour
         {
             input.Player.Move.performed -= ctx => moveInput = ctx.ReadValue<Vector2>();
             input.Player.Move.canceled -= ctx => moveInput = Vector2.zero;
-            input.Player.Attack.performed -= _ => isFiring = true;
-            input.Player.Attack.canceled -= _ => isFiring = false;
-            input.Player.Jump.performed -= _ => PlayerClone();
         }
     }
 
@@ -59,21 +48,5 @@ public class PlayerMovement : MonoBehaviour
         velocity.y = rb.linearVelocity.y;
         rb.linearVelocity = velocity;
 
-        if (isFiring && Time.time >= nextFireTime)
-        {
-            Fire();
-            nextFireTime = Time.time + fireCooldown;
-        }
-    }
-
-    private void PlayerClone()
-    {
-        Debug.Log("PlayerClone 発射！");
-    }
-
-    private void Fire()
-    {
-        Debug.Log("Fire 発射！");
-        onFire?.Invoke();
     }
 }
