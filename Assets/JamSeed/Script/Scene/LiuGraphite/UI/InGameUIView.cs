@@ -1,10 +1,11 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class InGameUIView : MonoBehaviour
 {
-    [SerializeField] private Slider[] _hpbar;         // HPバーのスライダー配列（5個想定）
+    [SerializeField] private Slider[] _hpbar;
     [SerializeField] private TextMeshProUGUI _LVText; // レベル表示用テキスト
 
     private const int MAX_HP_BARS = 5;       // HPバーの最大数
@@ -75,13 +76,18 @@ public class InGameUIView : MonoBehaviour
     /// <param name="hp">現在HP値</param>
     public void SetHPBar(int hp)
     {
-        Debug.Log($"SetHPBar: {hp}");
-
         // HPを0〜最大HP範囲に制限
         hp = Mathf.Clamp(hp, 0, MAX_HP_BARS * HP_PER_FULL_BAR);
 
-        int fullHeartCount = hp / HP_PER_FULL_BAR;  // 満タンバーの数
-        int halfHeartCount = hp % HP_PER_FULL_BAR;  // 半分バーの数（0か1）
+        // HPが0ならシーンを切り替え
+        if (hp == 0)
+        {
+            SceneManager.LoadScene("2Title");
+            return;
+        }
+
+        int fullHeartCount = hp / HP_PER_FULL_BAR;
+        int halfHeartCount = hp % HP_PER_FULL_BAR;
         int i = 0;
 
         // 満タンバーを設定

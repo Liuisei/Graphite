@@ -15,6 +15,9 @@ EditorBuildSettings:
     path: Assets/JamSeed/Scenes/4InGame2D.unity
     guid: bdd1f5bdc50cdff4baadf560a2c3c556
   - enabled: 1
+    path: Assets/JamSeed/Script/Scene/LiuGraphite/LiuInGame.unity
+    guid: 060a80fa8c119a04a97e4ede12682d88
+  - enabled: 1
     path: Assets/JamSeed/Scenes/3OutGame.unity
     guid: d270f7bb5f0bcd540b53acb732dea3cb
   m_configObjects:

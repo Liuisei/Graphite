@@ -1,11 +1,8 @@
 using Cysharp.Threading.Tasks;
 using JamSeed.Foundation;
 using System;
-using System.Threading.Tasks;
 using TMPro;
-using UnityEditor.SearchService;
 using UnityEngine;
-using UnityEngine.Windows;
 
 public class InGameScene : SceneSingleton<InGameScene>
 {

@@ -1021,10 +1021,26 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -6068695439763092709, guid: 75073b442b7d0144695f6f0199db03da, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6eb7d93512777ff49b5de6d215460c0e, type: 2}
+    - target: {fileID: -5306061952943790578, guid: 75073b442b7d0144695f6f0199db03da, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 96d875fbea30e31438caecad6564f757, type: 2}
+    - target: {fileID: -2107905628625199062, guid: 75073b442b7d0144695f6f0199db03da, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: ead36062b67fae14286a841f0428d4aa, type: 2}
     - target: {fileID: 919132149155446097, guid: 75073b442b7d0144695f6f0199db03da, type: 3}
       propertyPath: m_Name
       value: boss_tyoutintuki
       objectReference: {fileID: 0}
+    - target: {fileID: 930422515196320005, guid: 75073b442b7d0144695f6f0199db03da, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 11569ba53c4b33540a228677d265c5c6, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
