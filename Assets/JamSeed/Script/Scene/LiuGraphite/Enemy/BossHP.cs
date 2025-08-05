@@ -1,57 +1,34 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BossHP : MonoBehaviour
+public class BossHP : MonoBehaviour,IHasHp
 {
     [SerializeField] private int maxHP = 100;
     [SerializeField] private Slider hpSlider;
 
-    private int currentHP;
+    private int currentHP = 100;
+
+    public event Action OnHPChanged;
 
     public int CurrentHP => currentHP;
     public int MaxHP => maxHP;
 
+    public int HP => currentHP;
+
+    public int TeamID => 1;
+
     private void Awake()
     {
         currentHP = maxHP;
-
-        if (hpSlider == null)
-        {
-            Debug.LogError("HPスライダーがセットされていません！");
-        }
-        else
-        {
-            hpSlider.maxValue = maxHP;
-            hpSlider.value = currentHP;
-        }
-    }
-
-    public void TakeDamage(int amount)
-    {
-        if (amount <= 0) return;
-
-        currentHP = Mathf.Max(currentHP - amount, 0);
-        UpdateHPBar();
-
-        if (currentHP == 0)
-        {
-            Die();
-        }
-    }
-
-    public void Heal(int amount)
-    {
-        if (amount <= 0) return;
-
-        currentHP = Mathf.Min(currentHP + amount, maxHP);
         UpdateHPBar();
     }
-
-    private void UpdateHPBar()
+    public void UpdateHPBar()
     {
         if (hpSlider != null)
         {
-            hpSlider.value = currentHP;
+            Debug.LogWarning($"UpdateHPBar called with currentHP: {currentHP}, maxHP: {maxHP}");
+            hpSlider.value = (float)currentHP/(float)maxHP;
         }
     }
 
@@ -59,5 +36,21 @@ public class BossHP : MonoBehaviour
     {
         Debug.Log("Boss defeated!");
         // 死亡処理をここに書く
+    }
+
+    public void ChangeHP(int amount, GameObject attacker)
+    {
+        Debug.LogWarning($"ChangeHP called with amount: {amount}, attacker: {attacker?.name} {currentHP} {maxHP}");
+        currentHP -= amount;
+        if (currentHP < 0)
+        {
+            currentHP = 0;
+        }
+        else if (currentHP > maxHP)
+        {
+            currentHP = maxHP;
+        }
+
+        UpdateHPBar();
     }
 }

@@ -40,7 +40,7 @@ public class BulletOrigin : MonoBehaviour, IHasHp
     /// <param name="moveDirection">移動方向（正規化される）</param>
     /// <param name="bulletSpeed">弾丸の速度</param>
     /// <param name="bulletDamage">与えるダメージ（オプション）</param>
-    public void Initialize(Vector3 moveDirection, float bulletSpeed, int teamID, int bulletDamage = -1)
+    public void Initialize(Vector3 moveDirection, float bulletSpeed, int teamID, int bulletDamage = 1)
     {
         // HP初期化
         currentHP = maxHP;
