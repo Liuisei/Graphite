@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
-public class Replacement : MonoBehaviour
+public class Replacement2 : MonoBehaviour
 {
     [SerializeField,Header("毎秒プラスされる値")] float PlasGauge = 0.05f;
     private UnityEngine.UI.Image imageComponent;

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class fever : MonoBehaviour
+public class fever2 : MonoBehaviour
 {
     [SerializeField, Header("始まるときの音")] AudioClip StartFeverSE;
     [SerializeField, Header("フィーバー中になる音")] AudioClip FeverModeSE;

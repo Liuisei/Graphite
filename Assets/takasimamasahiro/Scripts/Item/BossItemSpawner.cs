@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ItemMover : MonoBehaviour
+public class BossItemSpawner : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class ItemSpawner: MonoBehaviour
+public class ItemSpawner2 : MonoBehaviour
 {
     [System.Serializable]
     public class ItemType
