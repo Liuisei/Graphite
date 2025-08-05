@@ -47,7 +47,6 @@ public class BossATK : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            Debug.Log($"FireLevel1: {i}");
             BulletOrigin bullet = Instantiate(bulletPrefab, firepoint.position, Quaternion.identity);
             bullet.transform.forward = fireVectals[i].position - firepoint.position;
             bullet.Initialize((fireVectals[i].position - firepoint.position), speed, 1, damage);

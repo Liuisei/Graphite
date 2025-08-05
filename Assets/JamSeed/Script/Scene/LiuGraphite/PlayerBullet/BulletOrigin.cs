@@ -119,7 +119,6 @@ public class BulletOrigin : MonoBehaviour, IHasHp
     void OnDestroy()
     {
         // 破棄時の処理（エフェクト、音声などを追加可能）
-        Debug.Log($"PlayerBullet destroyed at {transform.position}");
     }
 
     // デバッグ用：弾丸の移動方向を可視化
