@@ -57,6 +57,12 @@ public class InGameScene : SceneSingleton<InGameScene>
 
         HelthCloneCoolD().Forget();
         FibarCont().Forget(); // フィーバー管理を開始
+        //_playerDataLiu.;
+    }
+
+    private void DieCheck()
+    {
+
     }
 
     private async UniTaskVoid FibarCont()
