@@ -1,18 +1,26 @@
 using JamSeed.Foundation;
 using UnityEngine;
 using DG.Tweening;
+using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
+<<<<<<< HEAD
+using UnityEngine.SceneManagement; // DOTween
+=======
 using JamSeed.Runtime;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+>>>>>>> 1da1f75117199e031dc37cdb3b885d9a8eba100b
 
 public class Title : SceneSingleton<Title>
 {
     [SerializeField] LiteButton startButton;
+<<<<<<< HEAD
+=======
     [SerializeField] LiteButton _creditButton;
     [SerializeField] private Image _creditsUI;
     [SerializeField] private AudioClip _clickSound;
     [SerializeField] private StarWarsCreditController _starWarsCreditController;
+>>>>>>> 1da1f75117199e031dc37cdb3b885d9a8eba100b
 
     // アニメーション時間
     [SerializeField] float hoverScaleDuration = 0.2f;
@@ -68,18 +76,8 @@ public class Title : SceneSingleton<Title>
 
             startButton.image
                 .DOColor(hoverColor, colorChangeDuration);
-        });
 
-        _creditButton.AddOnEnter(() =>
-        {
-            isHovering = true;
-
-            _creditButton.transform
-                .DOScale(Vector3.one * hoverScale, hoverScaleDuration)
-                .SetEase(Ease.OutBack);
-
-            _creditButton.image
-                .DOColor(hoverColor, colorChangeDuration);
+            Debug.Log("Start Button Hovered");
         });
 
         startButton.AddOnExit(() =>
@@ -93,22 +91,8 @@ public class Title : SceneSingleton<Title>
             startButton.image
                 .DOColor(normalColor, colorChangeDuration);
 
+            Debug.Log("Start Button Exited");
         });
-
-        _creditButton.AddOnExit(() =>
-        {
-            isHovering = false;
-
-            _creditButton.transform
-                .DOScale(Vector3.one, normalScaleDuration)
-                .SetEase(Ease.OutBack);
-
-            _creditButton.image
-                .DOColor(normalColor, colorChangeDuration);
-
-        });
-
-        _creditButton.AddOnClick(OnClickCreditButton);
     }
 
     private async UniTaskVoid To2DInGame()
@@ -117,6 +101,8 @@ public class Title : SceneSingleton<Title>
         SceneManager.LoadScene("4InGame2D");
     }
 
+<<<<<<< HEAD
+=======
     // Creditの表示
     private void OnClickCreditButton()
     {
@@ -135,4 +121,5 @@ public class Title : SceneSingleton<Title>
         _creditsUI.gameObject.SetActive(false);
         _starWarsCreditController.gameObject.SetActive(false);
     }
+>>>>>>> 1da1f75117199e031dc37cdb3b885d9a8eba100b
 }

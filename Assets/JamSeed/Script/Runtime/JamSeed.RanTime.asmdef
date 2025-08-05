@@ -1,10 +1,14 @@
 {
     "name": "JamSeed.Runtime",
     "rootNamespace": "JamSeed.Runtime",
+<<<<<<< HEAD
+    "references": [],
+=======
     "references": [
         "JamSeed.Foundation",
         "UniTask"
     ],
+>>>>>>> 1da1f75117199e031dc37cdb3b885d9a8eba100b
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
