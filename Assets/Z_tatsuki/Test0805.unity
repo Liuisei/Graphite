@@ -286,7 +286,7 @@ PrefabInstance:
       objectReference: {fileID: 1285920096}
     - target: {fileID: 8927965184099997230, guid: cca9f442f8adc1241b0810a3649930d4, type: 3}
       propertyPath: playerClip.Array.size
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8927965184099997230, guid: cca9f442f8adc1241b0810a3649930d4, type: 3}
       propertyPath: 'playerClip.Array.data[0]'
@@ -306,6 +306,10 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: d438501d8e762fa43ad1993389b287cf, type: 3}
     - target: {fileID: 8927965184099997230, guid: cca9f442f8adc1241b0810a3649930d4, type: 3}
       propertyPath: 'playerClip.Array.data[4]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 75b5fb9270b4a4246be29832dd0c8f77, type: 3}
+    - target: {fileID: 8927965184099997230, guid: cca9f442f8adc1241b0810a3649930d4, type: 3}
+      propertyPath: 'playerClip.Array.data[5]'
       value: 
       objectReference: {fileID: 8300000, guid: 75b5fb9270b4a4246be29832dd0c8f77, type: 3}
     m_RemovedComponents: []

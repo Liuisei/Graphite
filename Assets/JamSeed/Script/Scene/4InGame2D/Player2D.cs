@@ -180,8 +180,8 @@ public class Player2D : MonoBehaviour
             ActivateBarrier();
             if (playerClip.Length > 1)
             {
-                Debug.Log("aa");
-                playerAudio.PlayOneShot(playerClip[4]);
+                playerAudio.PlayOneShot(playerClip[5]);
+                playerAudio.PlayOneShot(playerClip[3]);
             }
 
         }
