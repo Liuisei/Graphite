@@ -1,51 +1,92 @@
-using Cysharp.Threading.Tasks;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerTest1 : MonoBehaviour
 {
+    [Header("Move Settings")]
     [SerializeField] private float _speed = 1.0f;
+
+    [Header("Shoot Settings")]
+    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private Transform firePoint;
+    [SerializeField] private float bulletSpeed = 10f;
+    [SerializeField] private float spreadAngle = 15f; // 左右の角度差
 
     private Rigidbody _rigidbody;
     private Vector2 moveInput;
+    public bool IsMove = true;
 
-    public Action Onfire;
-    public Action OnPlayerClone;
-    public bool IsMove;
+    [SerializeField] private PlayerInput playerInput;
 
-   
-    private InputSystem_Actions _input;
     private void Awake()
     {
-       _rigidbody = GetComponent<Rigidbody>();
+        _rigidbody = GetComponent<Rigidbody>();
         _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-       
-
     }
 
-    private  void OnEnable()
+    private void OnEnable()
     {
-        _input = new InputSystem_Actions();
-
-        _input.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
-        _input.Player.Move.canceled += ctx => moveInput = Vector2.zero;
+        playerInput.actions["Move"].performed += OnMove;
+        playerInput.actions["Move"].canceled += OnMove;
+        playerInput.actions["Attack"].performed += OnFireInput;
     }
 
     private void OnDisable()
     {
-        _input.Player.Move.performed -= ctx => moveInput = ctx.ReadValue<Vector2>();
-        _input.Player.Move.canceled -= ctx => moveInput = Vector2.zero;
+        playerInput.actions["Move"].performed -= OnMove;
+        playerInput.actions["Move"].canceled -= OnMove;
+        playerInput.actions["Attack"].performed -= OnFireInput;
+    }
+
+    private void OnMove(InputAction.CallbackContext ctx)
+    {
+        moveInput = ctx.ReadValue<Vector2>();
+    }
+
+    private void OnFireInput(InputAction.CallbackContext ctx)
+    {
+        //FireBullet();
+        if (ctx.performed)
+        {
+            Fire3Way();
+        }
     }
 
     private void FixedUpdate()
     {
-        if(!IsMove) return;
+        if (!IsMove) return;
 
-        Vector3 move = new Vector3(moveInput.x, 0, moveInput.y)*_speed;
+        // W/S → X軸, A/D → Z軸
+        Vector3 move = new Vector3(moveInput.y, 0f, -moveInput.x) * _speed;
         Vector3 velocity = move;
-
+        velocity.y = _rigidbody.linearVelocity.y;
+        _rigidbody.linearVelocity = velocity;
     }
 
+    // 3方向に弾を飛ばす
+    private void FireBullet()
+    {
+        if (bulletPrefab == null || firePoint == null) return;
 
+        // 弾を生成
+        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        Debug.Log("Bullet fired!");
+    }
+    private void Fire3Way()
+    {
+        if (bulletPrefab == null || firePoint == null) return;
+
+        // 3方向（-1:左, 0:正面, 1:右）
+        for (int i = -1; i <= 1; i++)
+        {
+            Quaternion rot = Quaternion.Euler(0, i * spreadAngle, 0);
+            Vector3 dir = rot * firePoint.forward;
+            dir.y = 0; // 水平に固定
+
+            GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(dir));
+        }
+
+        Debug.Log(" 3Way Shot!");
+    }
 }
