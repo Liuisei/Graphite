@@ -9,9 +9,12 @@ public class PlayerTest1 : MonoBehaviour
 
     [Header("Shoot Settings")]
     [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private GameObject copyPrefab;
     [SerializeField] private Transform firePoint;
     [SerializeField] private float bulletSpeed = 10f;
     [SerializeField] private float spreadAngle = 15f; // 左右の角度差
+    [SerializeField] private int hp = 3;
+    [SerializeField] private LifeGauge LifeGauge;
 
     private Rigidbody _rigidbody;
     private Vector2 moveInput;
@@ -23,6 +26,7 @@ public class PlayerTest1 : MonoBehaviour
     {
         _rigidbody = GetComponent<Rigidbody>();
         _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+        LifeGauge.SetLifeGauge(hp);
     }
 
     private void OnEnable()
@@ -30,6 +34,7 @@ public class PlayerTest1 : MonoBehaviour
         playerInput.actions["Move"].performed += OnMove;
         playerInput.actions["Move"].canceled += OnMove;
         playerInput.actions["Attack"].performed += OnFireInput;
+        playerInput.actions["Jump"].performed += OnCopyInput;
     }
 
     private void OnDisable()
@@ -37,6 +42,7 @@ public class PlayerTest1 : MonoBehaviour
         playerInput.actions["Move"].performed -= OnMove;
         playerInput.actions["Move"].canceled -= OnMove;
         playerInput.actions["Attack"].performed -= OnFireInput;
+        playerInput.actions["Jump"].performed -= OnCopyInput;
     }
 
     private void OnMove(InputAction.CallbackContext ctx)
@@ -53,6 +59,14 @@ public class PlayerTest1 : MonoBehaviour
         }
     }
 
+    private void OnCopyInput(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed)
+        {
+            copyBullet();
+        }
+        }
+
     private void FixedUpdate()
     {
         if (!IsMove) return;
@@ -64,13 +78,13 @@ public class PlayerTest1 : MonoBehaviour
         _rigidbody.linearVelocity = velocity;
     }
 
-    // 3方向に弾を飛ばす
-    private void FireBullet()
+
+    private void copyBullet()
     {
-        if (bulletPrefab == null || firePoint == null) return;
+        if (copyPrefab == null || firePoint == null) return;
 
         // 弾を生成
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        GameObject bullet = Instantiate(copyPrefab, firePoint.position, firePoint.rotation);
         Debug.Log("Bullet fired!");
     }
     private void Fire3Way()
@@ -88,5 +102,13 @@ public class PlayerTest1 : MonoBehaviour
         }
 
         Debug.Log(" 3Way Shot!");
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("EnemyBullet"))
+        {
+            LifeGauge.SetLifeGauge2(1);
+
+        }
     }
 }
