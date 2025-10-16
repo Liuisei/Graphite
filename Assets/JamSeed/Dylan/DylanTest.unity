@@ -766,6 +766,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sisaku bosu
       objectReference: {fileID: 0}
+    - target: {fileID: 1197395065582420046, guid: a80a98702332cd54f91dbd83af7774f1, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 28712acf6e399ca41b6ae7f4b8e7f2d5, type: 2}
     - target: {fileID: 9196079897720200449, guid: a80a98702332cd54f91dbd83af7774f1, type: 3}
       propertyPath: 'lampionAndMouth.Array.data[1]'
       value: 

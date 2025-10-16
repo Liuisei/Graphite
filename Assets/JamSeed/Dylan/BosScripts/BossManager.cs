@@ -40,6 +40,10 @@ public class BossManager : MonoBehaviour
     public List<BossPhaseParts> lampionAndMouth;      // Phase 2
     public BossPhaseParts body;                       // Phase 3
 
+    [Header("Phase 2 Intensification")]
+    public float phase2FireRateMultiplier = 1.5f;
+    public float phase2ThunderRateMultiplier = 1.5f;
+
     private bool hasEntered = false;
     private float direction = -1f;
     private BossPhase currentPhase = BossPhase.Phase1_Shields;
@@ -91,6 +95,17 @@ public class BossManager : MonoBehaviour
         {
             fireTimer = 0f;
             Shoot();
+        }
+    }
+
+    private void Fire360Barrage(int bulletCount)
+    {
+        float angleStep = 360f / bulletCount;
+        for (int i = 0; i < bulletCount; i++)
+        {
+            float angle = i * angleStep;
+            Quaternion rotation = Quaternion.Euler(0f, angle, 0f);
+            Instantiate(bulletPrefab, body.transform.position, rotation);
         }
     }
 
@@ -169,6 +184,17 @@ public class BossManager : MonoBehaviour
         }
     }
 
+    private IEnumerator FinalPhaseAttack()
+    {
+        int barrageCount = 36; // par exemple
+        while (currentPhase == BossPhase.Phase3_Body)
+        {
+            Fire360Barrage(barrageCount);
+            yield return new WaitForSeconds(1f);
+        }
+    }
+
+
     // ------------------------ PHASE SYSTEM ------------------------
     private void InitPhase(List<BossPhaseParts> parts)
     {
@@ -194,11 +220,17 @@ public class BossManager : MonoBehaviour
 
             case BossPhase.Phase2_LampionAndMouth:
                 lampionAndMouth.Remove(part);
+                if (lampionAndMouth.Count == 1) // Phase2 intensification
+                {
+                    IntensifyPhase2();
+                }
+
                 if (lampionAndMouth.Count == 0)
                 {
                     Debug.Log("[BossManager] Phase 2 over → Phase 3");
                     currentPhase = BossPhase.Phase3_Body;
                     body.OnDestroyed += OnFinalPartDestroyed;
+                    StartCoroutine(FinalPhaseAttack());
                 }
                 break;
         }
@@ -208,4 +240,12 @@ public class BossManager : MonoBehaviour
     {
         Debug.Log("[BossManager] BOSS DOWN !");
     }
+
+    private void IntensifyPhase2()
+    {
+        fireRate *= phase2FireRateMultiplier;
+        thunderRate *= phase2ThunderRateMultiplier;
+        Debug.Log("[BossManager] Phase 2 intensified!");
+    }
+
 }

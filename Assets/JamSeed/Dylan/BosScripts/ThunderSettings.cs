@@ -11,12 +11,6 @@ public class ThunderSettings : MonoBehaviour
         Destroy(gameObject, duration);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         IHasHp target = other.GetComponent<IHasHp>();
@@ -24,6 +18,6 @@ public class ThunderSettings : MonoBehaviour
         {
             target.TakeDamage(damage, gameObject); // Attacker
         }
-        Destroy(gameObject);
+            Destroy(gameObject);
     }
 }
