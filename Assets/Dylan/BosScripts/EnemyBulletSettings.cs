@@ -18,6 +18,8 @@ public class EnemyBulletSettings : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log($"{other.tag} have been touched by a mine");
+
         IHasHp target = other.GetComponent<IHasHp>();
         if (target != null && target.TeamID == 1) // player ID
         {

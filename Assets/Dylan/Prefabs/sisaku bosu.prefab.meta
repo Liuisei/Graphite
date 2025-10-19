@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Dylan/Prefabs/sisaku bosu.prefab.meta
 guid: a80a98702332cd54f91dbd83af7774f1
+========
+guid: 28daface5af268343873ebea5b10027d
+>>>>>>>> TestDylan:Assets/tatuki/MD_boat 1.prefab.meta
 PrefabImporter:
   externalObjects: {}
   userData: 

@@ -3,17 +3,19 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - Gauge
+  - Enemy
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - enemy
+  - Player
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Shield
+  - Ground
+  - Enemy
   - 
   - 
   - 

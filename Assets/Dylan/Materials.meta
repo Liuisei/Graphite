@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Dylan/Materials.meta
 guid: ba58cfde880d76e4a9122bc1f20ce061
+========
+guid: 575bbd622bba83f43abc27f341fe1d8a
+>>>>>>>> TestDylan:Assets/tatuki.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

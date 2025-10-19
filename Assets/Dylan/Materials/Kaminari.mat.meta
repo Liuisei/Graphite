@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Dylan/Materials/Kaminari.mat.meta
 guid: a3c91819e596f794685a9db329811263
 NativeFormatImporter:
+========
+guid: f33430b41c8a42c49a3b9c380eb9f999
+PrefabImporter:
+>>>>>>>> TestDylan:Assets/tatuki/Cube.prefab.meta
   externalObjects: {}
   mainObjectFileID: 2100000
   userData: 

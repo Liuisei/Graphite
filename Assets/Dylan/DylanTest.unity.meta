@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Dylan/DylanTest.unity.meta
 guid: b001d200af8c9d04d8e307fcafb7ac22
+========
+guid: b90773eca60617f45b5900fd03452269
+>>>>>>>> TestDylan:Assets/Dylan/Default.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

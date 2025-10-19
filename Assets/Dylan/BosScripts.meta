@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Dylan/BosScripts.meta
 guid: 8a8f510bf221a5f4cac82eca300af11a
+========
+guid: 4995606f76ba91348bf3bb024c64a4ff
+>>>>>>>> TestDylan:Assets/Design/3D/Boss.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

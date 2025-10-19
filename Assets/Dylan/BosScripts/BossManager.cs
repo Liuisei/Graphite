@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using JamSeed.Runtime;
 
 public class BossManager : MonoBehaviour
 {
@@ -216,11 +217,11 @@ public class BossManager : MonoBehaviour
                     Debug.Log("[BossManager] Phase 1 over → Phase 2");
                     currentPhase = BossPhase.Phase2_LampionAndMouth;
                     InitPhase(lampionAndMouth);
+                    EnterPhase2();
                 }
-            break;
+                break;
 
             case BossPhase.Phase2_LampionAndMouth:
-                EnterPhase2();
                 lampionAndMouth.Remove(part);
                 if (lampionAndMouth.Count <= 1)
                 {
