@@ -64,6 +64,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 8c4fd75cbc447864c9056f39f5768064, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 09cdd1bae7cd8df49930c3223e1e40e8, type: 2}
     - target: {fileID: 919132149155446097, guid: 8c4fd75cbc447864c9056f39f5768064, type: 3}
       propertyPath: m_Name
       value: boss_bakudan
@@ -154,3 +158,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
+  damage: 1

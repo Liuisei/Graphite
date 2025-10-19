@@ -1,6 +1,7 @@
 using JamSeed.Runtime;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BossManager : MonoBehaviour
@@ -17,49 +18,64 @@ public class BossManager : MonoBehaviour
     public float minZ = -5f;
     public float maxZ = 5f;
     public float startReturnZ = 5f;
+    private float direction = -1f;
 
-    [Header("Shooting")]
+    [Header("Normal Attack (P1&P2)")] //Phase 1 & 2
     public GameObject bulletPrefab;
     public Transform firePoint;
-    public float fireRate = 1f;
-    public float fireTimer = 0f;
+    public float normalShootRate = 1f;
     public float[] shotAngles;
     public AudioClip houdan;
 
-    [Header("Thunder")]
+    [Header("Thunder (P1&P2)")] //Phase 1 & 2
     public GameObject thunderPrefab;
     public Transform thunderFirePoint;
     public float thunderWarningTime = 3f;
     public float thunderSpeed = 15f;
     public float thunderRate = 5f;
-    public float thunderTimer = 0f;
     public AudioClip thunderClip;
+
+    [Header("Barrage Attack (P2)")] //Phase 2
+    public float barrageRate = 7f;
+    public int bulletCount = 24; //number of mines
+
+    [Header("Rotation Attack (P3)")] //Phase 3
+    public float minFireCooldown = 0.025f; //min cooldown between 2 mines 
+    public float maxFireCooldown = 0.1f; //max cooldown between 2 mines
+    public float spinDuration = 1f; //DUration of the spin
+    public Transform[] spinFirePoints;
 
     [Header("Phases")]
     public List<BossPhaseParts> shields;              // Phase 1
     public List<BossPhaseParts> lampionAndMouth;      // Phase 2
     public BossPhaseParts body;                       // Phase 3
+    private BossPhase currentPhase = BossPhase.Phase1_Shields;
 
     [Header("Phase 2 Intensification")]
-    public float phase2FireRateMultiplier = 1.5f;
-    public float phase2ThunderRateMultiplier = 1.5f;
+    public float phase2FireRateMultiplier = 0.5f;
+    public float phase2ThunderRateMultiplier = 0.5f;
+    public float phase2BarrageRateMultiplier = 0.5f;
+
 
     private bool hasEntered = false;
-    private float direction = -1f;
-    private BossPhase currentPhase = BossPhase.Phase1_Shields;
+    private bool isImmerged = false;
+
+    private Coroutine verticalCoroutine;
 
     void Start()
     {
         InitPhase(shields);
+        verticalCoroutine = StartCoroutine(VerticalCycle());
+        Invoke("EnterPhase1", 1); //delay x secondes before attacking
+
     }
 
     void Update()
     {
         HandleMovement();
-        HandleShooting();
-        HandleThunder();
     }
 
+    #region Movement (Horizontal & vertical)
     void HandleMovement()
     {
         if (!hasEntered)
@@ -86,115 +102,102 @@ public class BossManager : MonoBehaviour
         }
     }
 
-    void HandleShooting()
+    // Stop the coroutine
+    public void StopVerticalMovement()
     {
-        if (!hasEntered) return;
-
-        fireTimer += Time.deltaTime;
-        if (fireTimer >= 1f / fireRate)
+        if (verticalCoroutine != null)
         {
-            fireTimer = 0f;
-            Shoot();
+            StopCoroutine(verticalCoroutine);
+            verticalCoroutine = null;
+            isImmerged = false;
+            StartCoroutine(MoveToY(0.75f, 1.5f));
         }
     }
 
-    private void Fire360Barrage(int bulletCount)
+    // Cycle of inside/outside the ocean
+    private IEnumerator VerticalCycle()
     {
-        float angleStep = 360f / bulletCount;
-        for (int i = 0; i < bulletCount; i++)
+        while (currentPhase == BossPhase.Phase1_Shields || currentPhase == BossPhase.Phase2_LampionAndMouth)
         {
-            float angle = i * angleStep;
-            Quaternion rotation = Quaternion.Euler(0f, angle, 0f);
-            Instantiate(bulletPrefab, body.transform.position, rotation);
+            yield return new WaitForSeconds(4f); // Tempo before start
+
+            // Descente en Lerp vers Y = -1.5
+            yield return StartCoroutine(MoveToY(-1.5f, 1.5f)); // // Y position, time for going to this position
+            isImmerged = true;
+            yield return new WaitForSeconds(4f); // Stay X secondes inside the ocean
+            // Remontée en Lerp vers Y = 0.75
+            yield return StartCoroutine(MoveToY(0.75f, 1.5f)); // Y position, time for going to this position
+            isImmerged = false;
+            yield return new WaitForSeconds(11f); // Stay X secondes outside the ocean
         }
     }
 
-    void Shoot()
+    //Smooth the vertical movement
+    private IEnumerator MoveToY(float targetY, float duration)
     {
-        foreach (float angle in shotAngles)
+        float startY = transform.position.y;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
         {
-            Quaternion rotation = Quaternion.Euler(0f, angle, 0f);
-            SoundManager.Instance.PlaySe(houdan);
-            Instantiate(bulletPrefab, firePoint.position, rotation);
+            elapsed += Time.deltaTime;
+            float newY = Mathf.Lerp(startY, targetY, elapsed / duration);
+            transform.position = new Vector3(transform.position.x, newY, transform.position.z);
+            yield return null;
         }
+
+        // Last position
+        transform.position = new Vector3(transform.position.x, targetY, transform.position.z);
     }
+    #endregion
 
-    public void HandleThunder()
+    #region PHASE 1
+    private void EnterPhase1()
     {
-        if (!hasEntered) return;
-
-        thunderTimer += Time.deltaTime;
-        if (thunderTimer >= thunderRate)
-        {
-            thunderTimer = 0f;
-            StartThunderAttack();
-        }
-    }
-
-    private void StartThunderAttack()
-    {
+        StartCoroutine(NormalAttackCoroutine());
         StartCoroutine(ThunderAttackCoroutine());
     }
-
-    private IEnumerator ThunderAttackCoroutine()
+    private void ExitPhase1()
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player == null) yield break;
+        StopCoroutine(NormalAttackCoroutine());
+        StopCoroutine(ThunderAttackCoroutine());
+    }
+    #endregion
 
-        GameObject thunder = Instantiate(thunderPrefab, thunderFirePoint.position, Quaternion.identity);
-
-        float timer = 0f;
-        Vector3 targetPos = Vector3.zero;
-
-        while (timer < thunderWarningTime)
-        {
-            if (player != null)
-            {
-                targetPos = player.transform.position;
-                thunder.transform.position = thunderFirePoint.position;
-
-                Vector3 dir = targetPos - thunder.transform.position;
-                dir.y = 0f;
-
-                if (dir.sqrMagnitude > 0.001f)
-                {
-                    float baseRotationY = -79f;
-                    float angleY = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
-                    float correctedY = angleY - baseRotationY;
-
-                    thunder.transform.rotation = Quaternion.Euler(0f, correctedY, -90f);
-                }
-            }
-            timer += Time.deltaTime;
-            yield return null;
-        }
-
-        Vector3 launchDir = (targetPos - thunder.transform.position).normalized;
-
-        while (true)
-        {
-            thunder.transform.position += launchDir * thunderSpeed * Time.deltaTime;
-            yield return null;
-
-            if (Vector3.Distance(thunderFirePoint.position, thunder.transform.position) > 50f)
-            {
-                Destroy(thunder);
-                yield break;
-            }
-        }
+    #region PHASE 2
+    private void EnterPhase2()
+    {
+        StartCoroutine(BarrageAttackCoroutine());
+    }
+    private void ExitPhase2()
+    {
+        StopCoroutine(BarrageAttackCoroutine());
     }
 
-    private IEnumerator FinalPhaseAttack()
+    private void IntensifyPhase2()
     {
-        int barrageCount = 36; // par exemple
-        while (currentPhase == BossPhase.Phase3_Body)
-        {
-            Fire360Barrage(barrageCount);
-            yield return new WaitForSeconds(1f);
-        }
+        normalShootRate *= phase2FireRateMultiplier;
+        thunderRate *= phase2ThunderRateMultiplier;
+        barrageRate *= phase2BarrageRateMultiplier;
+        Debug.Log("[BossManager] Phase 2 intensified!");
     }
+    #endregion
 
+    #region PHASE 3
+    private void EnterPhase3()
+    {
+        ExitPhase1();
+        ExitPhase2();
+        StartCoroutine(MoveToY(0.5f, 1.5f));
+        StartCoroutine(SpinAttackCoroutine());
+    }
+    private void ExitPhase3()
+    {
+        StopAllCoroutines();
+    }
+    #endregion
 
+    #region Phase logic
     // ------------------------ PHASE SYSTEM ------------------------
     private void InitPhase(List<BossPhaseParts> parts)
     {
@@ -216,12 +219,14 @@ public class BossManager : MonoBehaviour
                     currentPhase = BossPhase.Phase2_LampionAndMouth;
                     InitPhase(lampionAndMouth);
                 }
-                break;
+            break;
 
             case BossPhase.Phase2_LampionAndMouth:
+                EnterPhase2();
                 lampionAndMouth.Remove(part);
-                if (lampionAndMouth.Count == 1) // Phase2 intensification
+                if (lampionAndMouth.Count <= 1)
                 {
+                    StopVerticalMovement();
                     IntensifyPhase2();
                 }
 
@@ -229,23 +234,150 @@ public class BossManager : MonoBehaviour
                 {
                     Debug.Log("[BossManager] Phase 2 over → Phase 3");
                     currentPhase = BossPhase.Phase3_Body;
+                    EnterPhase3();
                     body.OnDestroyed += OnFinalPartDestroyed;
-                    StartCoroutine(FinalPhaseAttack());
                 }
-                break;
+            break;
         }
     }
 
     private void OnFinalPartDestroyed(BossPhaseParts part)
     {
         Debug.Log("[BossManager] BOSS DOWN !");
+        ExitPhase3();
     }
+    #endregion
 
-    private void IntensifyPhase2()
+    #region Normal shoot (Phase 1+2)
+    IEnumerator NormalAttackCoroutine()
     {
-        fireRate *= phase2FireRateMultiplier;
-        thunderRate *= phase2ThunderRateMultiplier;
-        Debug.Log("[BossManager] Phase 2 intensified!");
-    }
+        while (currentPhase == BossPhase.Phase1_Shields || currentPhase == BossPhase.Phase2_LampionAndMouth)
+        {
+            while (isImmerged)
+                yield return null;
 
+            foreach (float angle in shotAngles)
+            {
+                Quaternion rotation = Quaternion.Euler(0f, angle, 0f);
+                SoundManager.Instance.PlaySe(houdan);
+                Instantiate(bulletPrefab, firePoint.position, rotation);
+            }
+            yield return new WaitForSeconds(normalShootRate);
+        }
+        
+    }
+    #endregion
+
+    #region Thunder (Phase 1+2)
+    private IEnumerator ThunderAttackCoroutine()
+    {
+        GameObject target = GameObject.FindGameObjectWithTag("Player");
+        if (target == null) yield break;
+
+        while (currentPhase == BossPhase.Phase1_Shields || currentPhase == BossPhase.Phase2_LampionAndMouth)
+        {
+            GameObject thunder = Instantiate(thunderPrefab, thunderFirePoint.position, Quaternion.identity);
+
+            float timer = 0f;
+            Vector3 targetPos = Vector3.zero;
+
+            while (timer < thunderWarningTime)
+            {
+                if (target != null)
+                {
+                    targetPos = target.transform.position;
+                    thunder.transform.position = thunderFirePoint.position;
+
+                    Vector3 dir = targetPos - thunder.transform.position;
+                    dir.y = 0f;
+
+                    if (dir.sqrMagnitude > 0.001f)
+                    {
+                        float baseRotationY = -79f;
+                        float angleY = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
+                        float correctedY = angleY - baseRotationY;
+
+                        thunder.transform.rotation = Quaternion.Euler(0f, correctedY, -90f);
+                    }
+                }
+                timer += Time.deltaTime;
+                yield return null;
+            }
+
+            Vector3 launchDir = (targetPos - thunder.transform.position).normalized;
+
+            float traveled = 0f;
+            while (traveled < 50f)
+            {
+                float move = thunderSpeed * Time.deltaTime;
+                thunder.transform.position += launchDir * move;
+                traveled += move;
+                yield return null;
+            }
+
+            Destroy(thunder);
+            yield return new WaitForSeconds(thunderRate);
+        }
+    }
+    #endregion
+
+    #region Barrage Attack (Phase2)
+    private IEnumerator BarrageAttackCoroutine()
+    {
+        while (currentPhase == BossPhase.Phase2_LampionAndMouth)
+        {
+            while (isImmerged)
+                yield return null;
+
+            float angleStep = 360f / bulletCount;
+            for (int i = 0; i < bulletCount; i++)
+            {
+                float angle = i * angleStep;
+                Quaternion rotation = Quaternion.Euler(0f, angle, 0f);
+                Instantiate(bulletPrefab, body.transform.position, rotation);
+            }
+            yield return new WaitForSeconds(barrageRate);
+        }
+    }
+    #endregion
+
+    #region Rotation Attack (Phase 3)
+    private IEnumerator SpinAttackCoroutine()
+    {
+        while (currentPhase == BossPhase.Phase3_Body)
+        {
+            int direction = (Random.value > 0.5f) ? 1 : -1; //clockwise or anti-clockwise
+            Quaternion startY = Quaternion.Euler(0f, 90f, 0f); //origin position
+            float elapsed = 0f;
+            float nextFireTime = 0f;
+            float fireTimer = 0f;
+            float spinSpeed = 360f;
+
+            while (elapsed < spinDuration)
+            {
+                elapsed += Time.deltaTime;
+                float targetY = direction * spinSpeed * Time.deltaTime;
+                transform.Rotate(0f, targetY, 0f, Space.Self);
+
+                // Allow fire only when spinning
+                fireTimer += Time.deltaTime;
+                if (fireTimer >= nextFireTime)
+                {
+                    fireTimer = 0f;
+                    foreach (var point in spinFirePoints)
+                    {
+                        SoundManager.Instance.PlaySe(houdan);
+                        Instantiate(bulletPrefab, point.position, point.rotation);
+                    }
+                    nextFireTime = Random.Range(minFireCooldown, maxFireCooldown);
+                }
+                yield return null;
+            }
+
+            transform.rotation = startY; //Return in the original position (90 Y)
+            yield return new WaitForSeconds(1f); // Little break between 2 spins
+        }
+    }
+    #endregion
+    
 }
