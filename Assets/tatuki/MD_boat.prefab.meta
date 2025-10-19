@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Dylan/Prefabs/boss_kaminari.prefab.meta
+guid: d198e5302ffe5d648ab8db189a0ef98d
+========
 guid: 4e8c0a547ba3aa34985f80bdb0c654b9
+>>>>>>>> TestDylan:Assets/tatuki/MD_boat.prefab.meta
 PrefabImporter:
   externalObjects: {}
   userData: 
