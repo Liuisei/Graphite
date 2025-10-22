@@ -1,10 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class LifeGauge : MonoBehaviour
 {
-    //　ライフゲージプレハブ
     [SerializeField]
     private GameObject lifeObj;
 
@@ -22,23 +22,38 @@ public class LifeGauge : MonoBehaviour
             Instantiate<GameObject>(lifeObj, transform);
         }
     }
+
     //　ダメージ分だけ削除
     public void SetLifeGauge2(int damage)
     {
         for (int i = 0; i < damage; i++)
         {
-            //　最後のライフゲージを削除
-            Destroy(transform.GetChild(i).gameObject);
-            //Destroy(transform.GetChild(transform.childCount - 1 - i).gameObject);
+            if (transform.childCount <= 0) break;
+
+            // 最後のライフゲージを削除
+            Destroy(transform.GetChild(transform.childCount - 1).gameObject);
+        }
+
+        // 👇ライフゲージがすべて削除されたらゲーム終了
+        if (transform.childCount == 1)
+        {
+            GameOver();
         }
     }
+
     public void SetLifeGauge3(int heal)
     {
-        Debug.Log("HeAL");
         for (int i = 0; i < heal; i++)
         {
             Instantiate(lifeObj, transform);
         }
     }
 
+    private void GameOver()
+    {
+        Debug.Log("Game Over");
+        Time.timeScale = 0f;
+        // ここでゲームオーバーUI表示などを追加できる
+        // 例: FindObjectOfType<GameManager>().GameOver();
+    }
 }
