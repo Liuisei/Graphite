@@ -101,7 +101,7 @@ private okawari _okawari;
     private void copyBullet()
     {
         if (copyPrefab == null || firePoint == null) return;
-        Vector3 point1 = new Vector3(firePoint.position.x, 0, firePoint.position.z - 0.2f);
+        Vector3 point1 = new Vector3(firePoint.position.x, 0.1f, firePoint.position.z - 0.2f);
         // 弾を生成
         GameObject bullet = Instantiate(copyPrefab, point1, firePoint.rotation);
         Debug.Log("Bullet fired!");
@@ -109,7 +109,7 @@ private okawari _okawari;
 
     private void Beam()
     {
-        Vector3 position = new Vector3(firePoint.position.x,0, firePoint.position.z - 4f);
+        Vector3 position = new Vector3(firePoint.position.x,0.5f, firePoint.position.z - 4f);
         GameObject beam = Instantiate(beamPrefab, position, firePoint.rotation);
         beam.transform.localScale = new Vector3(1, 1, 10);
         Destroy(beam, 0.2f);
@@ -120,8 +120,8 @@ private okawari _okawari;
         if (bulletPrefab1 == null || firePoint == null) return;
 
         // 左右に少し離した発射位置を計算
-        Vector3 point1 = new Vector3(firePoint.position.x - 0.3f, 0, firePoint.position.z);
-        Vector3 point2 = new Vector3(firePoint.position.x + 0.3f, 0, firePoint.position.z);
+        Vector3 point1 = new Vector3(firePoint.position.x - 0.3f, 0.1f, firePoint.position.z);
+        Vector3 point2 = new Vector3(firePoint.position.x + 0.3f, 0.1f, firePoint.position.z);
         // 左方向の弾
         Instantiate(bulletPrefab1, point1, firePoint.rotation);
 
@@ -139,7 +139,7 @@ private okawari _okawari;
             Quaternion rot = Quaternion.Euler(0, i * spreadAngle, 0);
             Vector3 dir = rot * firePoint.forward;
             dir.y = 0; // 水平に固定
-
+            Vector3 position = new Vector3(firePoint.position.x, 0.1f, firePoint.position.z );
             GameObject bullet = Instantiate(bulletPrefab2, firePoint.position, Quaternion.LookRotation(dir));
         }
 
