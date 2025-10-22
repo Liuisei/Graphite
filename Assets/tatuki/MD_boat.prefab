@@ -137,11 +137,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 5
-  bulletPrefab: {fileID: 6689077301157373048, guid: f33430b41c8a42c49a3b9c380eb9f999, type: 3}
+  bulletPrefab1: {fileID: 6689077301157373048, guid: f33430b41c8a42c49a3b9c380eb9f999, type: 3}
+  bulletPrefab2: {fileID: 6689077301157373048, guid: 5ce3d3ed9d1960449bd67f869e892a71, type: 3}
+  beamPrefab: {fileID: 6689077301157373048, guid: 671caf7fc8cc1f148af228b2b0ee343e, type: 3}
+  level: 1
   copyPrefab: {fileID: 7103533739566267304}
   firePoint: {fileID: 8605400977332137707}
   bulletSpeed: 10
   spreadAngle: 15
+  hp: 3
+  LifeGauge: {fileID: 0}
   IsMove: 1
   playerInput: {fileID: 8090676348118876206}
 --- !u!65 &9017683844684525356
