@@ -33,6 +33,7 @@ public class BossManager : MonoBehaviour
     public float thunderSpeed = 15f;
     public float thunderRate = 5f;
     public AudioClip thunderClip;
+    private int thunderCounter;
 
     [Header("Barrage Attack (P2)")] //Phase 2
     public float barrageRate = 7f;
@@ -57,14 +58,10 @@ public class BossManager : MonoBehaviour
 
 
     private bool hasEntered = false;
-    private bool isImmerged = false;
-
-    private Coroutine verticalCoroutine;
 
     void Start()
     {
         InitPhase(shields);
-        verticalCoroutine = StartCoroutine(VerticalCycle());
         Invoke("EnterPhase1", 1); //delay x secondes before attacking
 
     }
@@ -99,54 +96,6 @@ public class BossManager : MonoBehaviour
                 direction = 1f;
             }
         }
-    }
-
-    // Stop the coroutine
-    public void StopVerticalMovement()
-    {
-        if (verticalCoroutine != null)
-        {
-            StopCoroutine(verticalCoroutine);
-            verticalCoroutine = null;
-            isImmerged = false;
-            StartCoroutine(MoveToY(0.75f, 1.5f));
-        }
-    }
-
-    // Cycle of inside/outside the ocean
-    private IEnumerator VerticalCycle()
-    {
-        while (currentPhase == BossPhase.Phase1_Shields || currentPhase == BossPhase.Phase2_LampionAndMouth)
-        {
-            yield return new WaitForSeconds(4f); // Tempo before start
-
-            // Descente en Lerp vers Y = -1.5
-            yield return StartCoroutine(MoveToY(-1.5f, 1.5f)); // // Y position, time for going to this position
-            isImmerged = true;
-            yield return new WaitForSeconds(4f); // Stay X secondes inside the ocean
-            // Remontée en Lerp vers Y = 0.75
-            yield return StartCoroutine(MoveToY(0.75f, 1.5f)); // Y position, time for going to this position
-            isImmerged = false;
-            yield return new WaitForSeconds(11f); // Stay X secondes outside the ocean
-        }
-    }
-
-    //Smooth the vertical movement
-    private IEnumerator MoveToY(float targetY, float duration)
-    {
-        float startY = transform.position.y;
-        float elapsed = 0f;
-
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            float newY = Mathf.Lerp(startY, targetY, elapsed / duration);
-            transform.position = new Vector3(transform.position.x, newY, transform.position.z);
-            yield return null;
-        }
-
-        // Last position
-        transform.position = new Vector3(transform.position.x, targetY, transform.position.z);
     }
     #endregion
 
@@ -187,7 +136,6 @@ public class BossManager : MonoBehaviour
     {
         ExitPhase1();
         ExitPhase2();
-        StartCoroutine(MoveToY(0.5f, 1.5f));
         StartCoroutine(SpinAttackCoroutine());
     }
     private void ExitPhase3()
@@ -225,7 +173,6 @@ public class BossManager : MonoBehaviour
                 lampionAndMouth.Remove(part);
                 if (lampionAndMouth.Count <= 1)
                 {
-                    StopVerticalMovement();
                     IntensifyPhase2();
                 }
 
@@ -252,9 +199,6 @@ public class BossManager : MonoBehaviour
     {
         while (currentPhase == BossPhase.Phase1_Shields || currentPhase == BossPhase.Phase2_LampionAndMouth)
         {
-            while (isImmerged)
-                yield return null;
-
             foreach (float angle in shotAngles)
             {
                 Quaternion rotation = Quaternion.Euler(0f, angle, 0f);
@@ -276,6 +220,7 @@ public class BossManager : MonoBehaviour
         while (currentPhase == BossPhase.Phase1_Shields || currentPhase == BossPhase.Phase2_LampionAndMouth)
         {
             GameObject thunder = Instantiate(thunderPrefab, thunderFirePoint.position, Quaternion.identity);
+            SoundManager.Instance.PlaySe(thunderClip);
 
             float timer = 0f;
             Vector3 targetPos = Vector3.zero;
@@ -317,6 +262,13 @@ public class BossManager : MonoBehaviour
             Destroy(thunder);
             yield return new WaitForSeconds(thunderRate);
         }
+
+        thunderCounter++;
+        if (thunderCounter >= 3)
+        {
+           // PlayLanternAnimation(); // descente
+            thunderCounter = 0; // reset pour le prochain cycle
+        }
     }
     #endregion
 
@@ -325,9 +277,6 @@ public class BossManager : MonoBehaviour
     {
         while (currentPhase == BossPhase.Phase2_LampionAndMouth)
         {
-            while (isImmerged)
-                yield return null;
-
             float angleStep = 360f / bulletCount;
             for (int i = 0; i < bulletCount; i++)
             {
