@@ -16,8 +16,8 @@ public class BossManager : MonoBehaviour
     public float moveSpeed = 1f;
     public float minZ = -5f;
     public float maxZ = 5f;
-    public float startReturnZ = 5f;
-    private float direction = -1f;
+    public float minX = -5f;
+    public float maxX = 5f;
 
     [Header("Normal Attack (P1&P2)")] //Phase 1 & 2
     public GameObject bulletPrefab;
@@ -34,6 +34,12 @@ public class BossManager : MonoBehaviour
     public float thunderRate = 5f;
     public AudioClip thunderClip;
     private int thunderCounter;
+    private bool isCoolingDown = false;
+    public GameObject thunderBarrier;
+
+    [Header("Lantern animation")]
+    public Animator lampAnimator;
+    public float downDuration = 5f;
 
     [Header("Barrage Attack (P2)")] //Phase 2
     public float barrageRate = 7f;
@@ -56,49 +62,42 @@ public class BossManager : MonoBehaviour
     public float phase2ThunderRateMultiplier = 0.5f;
     public float phase2BarrageRateMultiplier = 0.5f;
 
-
-    private bool hasEntered = false;
-
     void Start()
     {
         InitPhase(shields);
         Invoke("EnterPhase1", 1); //delay x secondes before attacking
-
+        StartCoroutine(RandomMovement());
     }
 
-    void Update()
+    #region Movement
+    IEnumerator RandomMovement()
     {
-        HandleMovement();
-    }
-
-    #region Movement (Horizontal & vertical)
-    void HandleMovement()
-    {
-        if (!hasEntered)
+        while (true)
         {
-            transform.position += new Vector3(0, 0, direction * moveSpeed * Time.deltaTime);
+            // Where to move
+            Vector3 targetPos = new Vector3(
+                Random.Range(minX, maxX),
+                transform.position.y,
+                Random.Range(minZ, maxZ)
+            );
 
-            if (transform.position.z <= startReturnZ)
-            {
-                hasEntered = true;
-            }
-        }
-        else
-        {
-            transform.position += new Vector3(0, 0, direction * moveSpeed * Time.deltaTime);
+            // Random speed
+            float speed = Random.Range(moveSpeed * 0.5f, moveSpeed * 1.5f);
 
-            if (transform.position.z >= maxZ - 0.01f && direction > 0f)
+            // Move to
+            while (Vector3.Distance(transform.position, targetPos) > 0.1f)
             {
-                direction = -1f;
+                transform.position = Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);
+                yield return null;
             }
-            else if (transform.position.z <= minZ + 0.01f && direction < 0f)
-            {
-                direction = 1f;
-            }
+
+            yield return new WaitForSeconds(0.5f);
         }
     }
     #endregion
 
+    #region Phase logic
+    // ------------------------ PHASE SYSTEM ------------------------
     #region PHASE 1
     private void EnterPhase1()
     {
@@ -144,8 +143,6 @@ public class BossManager : MonoBehaviour
     }
     #endregion
 
-    #region Phase logic
-    // ------------------------ PHASE SYSTEM ------------------------
     private void InitPhase(List<BossPhaseParts> parts)
     {
         foreach (var part in parts)
@@ -219,6 +216,12 @@ public class BossManager : MonoBehaviour
 
         while (currentPhase == BossPhase.Phase1_Shields || currentPhase == BossPhase.Phase2_LampionAndMouth)
         {
+            if (isCoolingDown)
+            {
+                yield return null;
+                continue;
+            }
+
             GameObject thunder = Instantiate(thunderPrefab, thunderFirePoint.position, Quaternion.identity);
             SoundManager.Instance.PlaySe(thunderClip);
 
@@ -260,15 +263,35 @@ public class BossManager : MonoBehaviour
             }
 
             Destroy(thunder);
+
+            thunderCounter++;
+            if (thunderCounter >= 3)
+            {
+                thunderCounter = 0; // reset
+                yield return StartCoroutine(HandleLampDown());
+            }
+
             yield return new WaitForSeconds(thunderRate);
         }
 
-        thunderCounter++;
-        if (thunderCounter >= 3)
-        {
-           // PlayLanternAnimation(); // descente
-            thunderCounter = 0; // reset pour le prochain cycle
-        }
+        
+    }
+
+    private IEnumerator HandleLampDown()
+    {
+        float animDuration = 3.5f;
+        isCoolingDown = true;
+
+        lampAnimator.SetTrigger("Down");
+        yield return new WaitForSeconds(animDuration);
+        thunderBarrier.SetActive(true);
+
+        yield return new WaitForSeconds(downDuration);
+
+        lampAnimator.SetTrigger("Up");
+        yield return new WaitForSeconds(animDuration);
+        thunderBarrier.SetActive(false);
+        isCoolingDown = false;
     }
     #endregion
 
@@ -327,5 +350,4 @@ public class BossManager : MonoBehaviour
         }
     }
     #endregion
-    
 }
