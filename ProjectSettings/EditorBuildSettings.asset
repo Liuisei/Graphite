@@ -8,18 +8,24 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/JamSeed/Scenes/TestScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 1
+  - enabled: 0
     path: Assets/JamSeed/Scenes/2Title.unity
     guid: 23e17b3b2a9173c44804bcf6a2d680a2
-  - enabled: 1
+  - enabled: 0
     path: Assets/JamSeed/Scenes/4InGame2D.unity
     guid: bdd1f5bdc50cdff4baadf560a2c3c556
-  - enabled: 1
+  - enabled: 0
     path: Assets/JamSeed/Script/Scene/LiuGraphite/LiuInGame.unity
     guid: 060a80fa8c119a04a97e4ede12682d88
-  - enabled: 1
+  - enabled: 0
     path: Assets/JamSeed/Scenes/3OutGame.unity
     guid: d270f7bb5f0bcd540b53acb732dea3cb
+  - enabled: 1
+    path: Assets/Graphite/Scene/0Title/Title.unity
+    guid: 6e073bdfa57d5344b9bab7915d8825b2
+  - enabled: 1
+    path: Assets/Graphite/Scene/1Game/Game.unity
+    guid: 9b580c0b612b57542a5fd4f6924c39b1
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

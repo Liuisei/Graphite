@@ -5,7 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - Gauge
-  - EnemyBullet
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -15,7 +15,7 @@ TagManager:
   - UI
   - Shield
   - Ground
-  - 
+  - Enemy
   - 
   - 
   - 
