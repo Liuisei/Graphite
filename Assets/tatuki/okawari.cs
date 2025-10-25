@@ -4,20 +4,29 @@ using UnityEngine.UI;
 
  public class okawari : MonoBehaviour
 {
-    [SerializeField] Slider slider;
+    [SerializeField] Image _okawariimage;
    public float gauge = 0f;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     private void Start()
     {
-        slider.value = gauge;
+        _okawariimage.fillAmount = 0.1f;
     }
 
-    public void TakeOkawari()
+    public void  TakeOkawari()
     {
+
         gauge += 0.1f;
         gauge = Mathf.Clamp(gauge, 0f, 1f);
-        slider.value  = gauge;
+        ChangeOkawari();
+
+
+    }
+
+    public void ChangeOkawari()
+    {
+        _okawariimage.fillAmount = gauge;
     }
 
      public float GetOkawari() => gauge;

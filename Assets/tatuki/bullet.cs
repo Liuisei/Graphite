@@ -3,12 +3,12 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField] private float speed = 10f;
-    [SerializeField] private float lifetime = 3f;
-    Vector3 Velocity;
- private okawari okawari;
+    [SerializeField] protected float speed = 10f;
+    [SerializeField] protected float lifetime = 3f;
+   protected Vector3 Velocity;
+ protected okawari okawari;
 
-    private void Start()
+    protected virtual void Start()
     {
         okawari = FindAnyObjectByType<okawari>();
         Destroy(gameObject, lifetime); // 一定時間後に削除
@@ -16,19 +16,21 @@ public class Bullet : MonoBehaviour
 
     }
 
-    private void Update()
+    protected void Update()
     {
         // 前方向(Z軸)にまっすぐ進む
         transform.Translate(Velocity* speed * Time.deltaTime);
     }
 
-    private void OnCollisionEnter(Collision other)
+    protected virtual void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.CompareTag("EnemyBullet"))
         {
+
             okawari.TakeOkawari();
             okawari.GetOkawari();
-            Debug.Log(okawari.GetOkawari());
+
+
         Destroy(this.gameObject);
         }
     }

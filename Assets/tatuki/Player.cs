@@ -10,7 +10,6 @@ public class PlayerTest1 : MonoBehaviour
 
     [FormerlySerializedAs("bulletPrefab")] [Header("Shoot Settings")] [SerializeField]
     private GameObject bulletPrefab1;
-
     [SerializeField] private GameObject bulletPrefab2;
     [SerializeField] private GameObject beamPrefab;
 
@@ -22,7 +21,7 @@ public class PlayerTest1 : MonoBehaviour
     [SerializeField] private int hp = 3;
     [SerializeField] private LifeGauge LifeGauge;
 
-private okawari _okawari;
+    private okawari _okawari;
     private Rigidbody _rigidbody;
     private Vector2 moveInput;
     public bool IsMove = true;
@@ -34,7 +33,7 @@ private okawari _okawari;
         _rigidbody = GetComponent<Rigidbody>();
         _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         LifeGauge.SetLifeGauge(hp);
-        _okawari =  FindAnyObjectByType<okawari>();
+        _okawari = FindAnyObjectByType<okawari>();
     }
 
     private void OnEnable()
@@ -80,9 +79,12 @@ private okawari _okawari;
 
     private void OnCopyInput(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed&&_okawari.GetOkawari() ==1)
+        if (ctx.performed && _okawari.GetOkawari() == 1)
         {
             copyBullet();
+            _okawari.gauge = 0f;
+            _okawari.ChangeOkawari();
+            Debug.Log(_okawari.gauge);
         }
     }
 
@@ -101,7 +103,7 @@ private okawari _okawari;
     private void copyBullet()
     {
         if (copyPrefab == null || firePoint == null) return;
-        Vector3 point1 = new Vector3(firePoint.position.x, 0.1f, firePoint.position.z - 0.2f);
+        Vector3 point1 = new Vector3(firePoint.position.x, 0f, firePoint.position.z - 0.3f);
         // 弾を生成
         GameObject bullet = Instantiate(copyPrefab, point1, firePoint.rotation);
         Debug.Log("Bullet fired!");
@@ -109,7 +111,7 @@ private okawari _okawari;
 
     private void Beam()
     {
-        Vector3 position = new Vector3(firePoint.position.x,0.5f, firePoint.position.z - 4f);
+        Vector3 position = new Vector3(firePoint.position.x, 0.5f, firePoint.position.z - 4f);
         GameObject beam = Instantiate(beamPrefab, position, firePoint.rotation);
         beam.transform.localScale = new Vector3(1, 1, 10);
         Destroy(beam, 0.2f);
@@ -139,7 +141,7 @@ private okawari _okawari;
             Quaternion rot = Quaternion.Euler(0, i * spreadAngle, 0);
             Vector3 dir = rot * firePoint.forward;
             dir.y = 0; // 水平に固定
-            Vector3 position = new Vector3(firePoint.position.x, 0.1f, firePoint.position.z );
+            Vector3 position = new Vector3(firePoint.position.x, 0.1f, firePoint.position.z);
             GameObject bullet = Instantiate(bulletPrefab2, firePoint.position, Quaternion.LookRotation(dir));
         }
 
