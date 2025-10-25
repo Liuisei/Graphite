@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
+using System.Collections;
 
 public class PlayerTest1 : MonoBehaviour
 {
@@ -23,6 +24,11 @@ public class PlayerTest1 : MonoBehaviour
     [SerializeField] private LifeGauge LifeGauge;
 
     [SerializeField] private int _damage = 10;
+
+    [SerializeField] private GameObject shieldPrefab; // ← Project内のシールドPrefabを設定
+    [SerializeField] private LifeGauge lifeGauge;     // ← HPゲージ管理用
+
+    private GameObject currentShield; // 今出ているシールドを記録
     public int Damage => _damage;
     private okawari _okawari;
     private Rigidbody _rigidbody;
@@ -54,7 +60,7 @@ public class PlayerTest1 : MonoBehaviour
         playerInput.actions["Attack"].performed -= OnFireInput;
         playerInput.actions["Jump"].performed -= OnCopyInput;
     }
-
+  public void AddDamage(int damage) => _damage += damage;
     private void OnMove(InputAction.CallbackContext ctx)
     {
         moveInput = ctx.ReadValue<Vector2>();
@@ -154,9 +160,42 @@ public class PlayerTest1 : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (collision.gameObject.CompareTag("Shield"))
+        {
+            if (currentShield == null)
+            {
+                SpawnShield();
+            }
+
+
+        }
         if (collision.gameObject.CompareTag("EnemyBullet"))
         {
             LifeGauge.SetLifeGauge2(1);
+        }
+    }
+    private void SpawnShield()
+    {
+        // シールドをプレイヤー位置に生成
+        currentShield = Instantiate(shieldPrefab, transform.position, Quaternion.identity);
+
+        // プレイヤーの子に設定（動きに追従させる）
+        currentShield.transform.SetParent(this.transform);
+
+        // 3秒後に解除＆削除
+        StartCoroutine(RemoveShieldAfterDelay(3f));
+    }
+
+    private IEnumerator RemoveShieldAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (currentShield != null)
+        {
+            // 親子解除して削除
+            currentShield.transform.SetParent(null);
+            Destroy(currentShield);
+            currentShield = null;
         }
     }
 }
