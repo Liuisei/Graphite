@@ -10,6 +10,7 @@ public class PlayerTest1 : MonoBehaviour
 
     [FormerlySerializedAs("bulletPrefab")] [Header("Shoot Settings")] [SerializeField]
     private GameObject bulletPrefab1;
+
     [SerializeField] private GameObject bulletPrefab2;
     [SerializeField] private GameObject beamPrefab;
 
@@ -21,6 +22,8 @@ public class PlayerTest1 : MonoBehaviour
     [SerializeField] private int hp = 3;
     [SerializeField] private LifeGauge LifeGauge;
 
+    [SerializeField] private int _damage = 10;
+    public int Damage => _damage;
     private okawari _okawari;
     private Rigidbody _rigidbody;
     private Vector2 moveInput;

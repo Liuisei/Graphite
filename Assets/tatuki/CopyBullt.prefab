@@ -151,3 +151,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   lifetime: 3
+  playerTest: {fileID: 5013114820022133086, guid: 625cb507966de164dab3dbaf32eea1ef, type: 3}
