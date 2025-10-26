@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Gauge
   - Enemy
+  - EnemyBullet
+  - Shield
   layers:
   - Default
   - TransparentFX

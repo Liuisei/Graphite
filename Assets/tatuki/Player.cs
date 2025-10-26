@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
+using System.Collections;
 
 public class PlayerTest1 : MonoBehaviour
 {
@@ -22,7 +23,14 @@ public class PlayerTest1 : MonoBehaviour
     [SerializeField] private int hp = 3;
     [SerializeField] private LifeGauge LifeGauge;
 
-private okawari _okawari;
+    [SerializeField] private int _damage = 10;
+
+    [SerializeField] private GameObject shieldPrefab; // ← Project内のシールドPrefabを設定
+    [SerializeField] private LifeGauge lifeGauge;     // ← HPゲージ管理用
+
+    private GameObject currentShield; // 今出ているシールドを記録
+    public int Damage => _damage;
+    private okawari _okawari;
     private Rigidbody _rigidbody;
     private Vector2 moveInput;
     public bool IsMove = true;
@@ -34,7 +42,7 @@ private okawari _okawari;
         _rigidbody = GetComponent<Rigidbody>();
         _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         LifeGauge.SetLifeGauge(hp);
-        _okawari =  FindAnyObjectByType<okawari>();
+        _okawari = FindAnyObjectByType<okawari>();
     }
 
     private void OnEnable()
@@ -52,7 +60,7 @@ private okawari _okawari;
         playerInput.actions["Attack"].performed -= OnFireInput;
         playerInput.actions["Jump"].performed -= OnCopyInput;
     }
-
+  public void AddDamage(int damage) => _damage += damage;
     private void OnMove(InputAction.CallbackContext ctx)
     {
         moveInput = ctx.ReadValue<Vector2>();
@@ -80,9 +88,12 @@ private okawari _okawari;
 
     private void OnCopyInput(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed&&_okawari.GetOkawari() ==1)
+        if (ctx.performed && _okawari.GetOkawari() == 1)
         {
             copyBullet();
+            _okawari.gauge = 0f;
+            _okawari.ChangeOkawari();
+            Debug.Log(_okawari.gauge);
         }
     }
 
@@ -101,7 +112,7 @@ private okawari _okawari;
     private void copyBullet()
     {
         if (copyPrefab == null || firePoint == null) return;
-        Vector3 point1 = new Vector3(firePoint.position.x, 0.1f, firePoint.position.z - 0.2f);
+        Vector3 point1 = new Vector3(firePoint.position.x, 0f, firePoint.position.z - 0.3f);
         // 弾を生成
         GameObject bullet = Instantiate(copyPrefab, point1, firePoint.rotation);
         Debug.Log("Bullet fired!");
@@ -109,7 +120,7 @@ private okawari _okawari;
 
     private void Beam()
     {
-        Vector3 position = new Vector3(firePoint.position.x,0.5f, firePoint.position.z - 4f);
+        Vector3 position = new Vector3(firePoint.position.x, 0.5f, firePoint.position.z - 4f);
         GameObject beam = Instantiate(beamPrefab, position, firePoint.rotation);
         beam.transform.localScale = new Vector3(1, 1, 10);
         Destroy(beam, 0.2f);
@@ -139,7 +150,7 @@ private okawari _okawari;
             Quaternion rot = Quaternion.Euler(0, i * spreadAngle, 0);
             Vector3 dir = rot * firePoint.forward;
             dir.y = 0; // 水平に固定
-            Vector3 position = new Vector3(firePoint.position.x, 0.1f, firePoint.position.z );
+            Vector3 position = new Vector3(firePoint.position.x, 0.1f, firePoint.position.z);
             GameObject bullet = Instantiate(bulletPrefab2, firePoint.position, Quaternion.LookRotation(dir));
         }
 
@@ -149,9 +160,42 @@ private okawari _okawari;
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (collision.gameObject.CompareTag("Shield"))
+        {
+            if (currentShield == null)
+            {
+                SpawnShield();
+            }
+
+
+        }
         if (collision.gameObject.CompareTag("EnemyBullet"))
         {
             LifeGauge.SetLifeGauge2(1);
+        }
+    }
+    private void SpawnShield()
+    {
+        // シールドをプレイヤー位置に生成
+        currentShield = Instantiate(shieldPrefab, transform.position, Quaternion.identity);
+
+        // プレイヤーの子に設定（動きに追従させる）
+        currentShield.transform.SetParent(this.transform);
+
+        // 3秒後に解除＆削除
+        StartCoroutine(RemoveShieldAfterDelay(3f));
+    }
+
+    private IEnumerator RemoveShieldAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (currentShield != null)
+        {
+            // 親子解除して削除
+            currentShield.transform.SetParent(null);
+            Destroy(currentShield);
+            currentShield = null;
         }
     }
 }
