@@ -29,34 +29,8 @@ public class okawari : MonoBehaviour
         ChangeOkawari(); // UI反映
     }
 
-    /// <summary>
-    /// お代わりゲージを時間経過でマックスにする
-    /// </summary>
-    public void FillOkawariOverTime()
-    {
-        if (_fillCoroutine != null)
-        {
-            StopCoroutine(_fillCoroutine);
-        }
-        _fillCoroutine = StartCoroutine(FillOkawariRoutine());
-    }
+   
 
-    private IEnumerator FillOkawariRoutine()
-    {
-        float startValue = okawarigauge;
-        float elapsedTime = 0f;
-
-        while (elapsedTime < fillduration)
-        {
-            elapsedTime += Time.deltaTime;
-            okawarigauge = Mathf.Lerp(startValue, 1f, elapsedTime / fillduration);
-            ChangeOkawari();
-            yield return null;
-        }
-
-        okawarigauge = 1f;
-        ChangeOkawari();
-    }
     public void TakeOkawari()
     {
         okawarigauge += 0.1f;
