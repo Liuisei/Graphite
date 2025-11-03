@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class PlayerTest1 : MonoBehaviour
 {
@@ -34,7 +35,7 @@ public class PlayerTest1 : MonoBehaviour
     private Rigidbody _rigidbody;
     private Vector2 moveInput;
     public bool IsMove = true;
-
+    private bool iscopying = false;
     [SerializeField] private PlayerInput playerInput;
 
     private void Awake()
@@ -88,13 +89,41 @@ public class PlayerTest1 : MonoBehaviour
 
     private void OnCopyInput(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed && _okawari.GetOkawari() == 1)
+        Debug.Log("0");
+        if (ctx.performed && (_okawari.GetOkawari() == 1 || _okawari.GetFeverGauge() == 1))
+        {
+            Debug.Log("1");
+            if (_okawari.IsFever&&!iscopying)
+            {
+                Debug.Log("2");
+                StartCoroutine(FreeCopyBullet(3f));
+                _okawari.FeverReset();
+            }
+            else
+            {
+
+            copyBullet();
+            _okawari.okawarigauge = 0f;
+            _okawari.ChangeOkawari();
+            Debug.Log(_okawari.okawarigauge);
+            }
+        }
+    }
+
+    private IEnumerator FreeCopyBullet(float duration)
+    {
+        iscopying = true;
+        float elapsed = 0f;
+
+        // 3秒間コピー弾を連射する
+        while (elapsed < duration)
         {
             copyBullet();
-            _okawari.gauge = 0f;
-            _okawari.ChangeOkawari();
-            Debug.Log(_okawari.gauge);
+            yield return new WaitForSeconds(0.2f); // 発射間隔
+            elapsed += 0.2f;
         }
+
+        iscopying = false;
     }
 
     private void FixedUpdate()
@@ -160,6 +189,7 @@ public class PlayerTest1 : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+
         if (collision.gameObject.CompareTag("Shield"))
         {
             if (currentShield == null)
