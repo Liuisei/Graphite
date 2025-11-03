@@ -90,25 +90,23 @@ public class PlayerTest1 : MonoBehaviour
     private void OnCopyInput(InputAction.CallbackContext ctx)
     {
         Debug.Log("0");
-        if (ctx.performed && (_okawari.GetOkawari() == 1 || _okawari.GetFeverGauge() == 1))
+        if (!ctx.performed) return;
+
+        // --- フィーバー中の処理 ---
+        if (_okawari.IsFever && !iscopying)
         {
-            Debug.Log("1");
-            if (_okawari.IsFever&&!iscopying)
-            {
-                Debug.Log("2");
-                StartCoroutine(FreeCopyBullet(3f));
-
-
-            }
-            else
-            {
-
-            copyBullet();
-            _okawari.okawarigauge = 0f;
-            _okawari.ChangeOkawari();
-            Debug.Log(_okawari.okawarigauge);
-            }
+            Debug.Log("フィーバー突入！");
+            StartCoroutine(FreeCopyBullet(3f));
+            return;
         }
+            if (_okawari.GetOkawari() == 1)
+            {
+                copyBullet();
+                _okawari.okawarigauge = 0f;
+                _okawari.ChangeOkawari();
+                Debug.Log("お代わり発動！");
+            }
+
     }
 
     private IEnumerator FreeCopyBullet(float duration)
