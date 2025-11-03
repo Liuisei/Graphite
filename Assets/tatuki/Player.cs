@@ -97,7 +97,8 @@ public class PlayerTest1 : MonoBehaviour
             {
                 Debug.Log("2");
                 StartCoroutine(FreeCopyBullet(3f));
-                _okawari.FeverReset();
+
+
             }
             else
             {
@@ -124,6 +125,7 @@ public class PlayerTest1 : MonoBehaviour
         }
 
         iscopying = false;
+        _okawari.FeverReset();
     }
 
     private void FixedUpdate()

@@ -37,7 +37,8 @@ public class okawari : MonoBehaviour
     public void FeverReset()
     {
       if(IsFever)  IsFever = false;
-        feverGauge = 0f;
+        feverGauge = 0.1f;
+        ChangeFiverGauge();
     }
 
     public void ChangeFiverGauge()
