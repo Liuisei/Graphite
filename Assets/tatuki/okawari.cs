@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +10,8 @@ public class okawari : MonoBehaviour
     public float okawarigauge = 0f;
     public float feverGauge = 0f;
     public bool IsFever = false;
-
+    private float fillduration = 3f;
+    private Coroutine _fillCoroutine;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
@@ -18,7 +20,43 @@ public class okawari : MonoBehaviour
         _okawariimage.fillAmount = 0.1f;
         _feverGauge.fillAmount = 0.1f;
     }
+    private void Update()
+    {
+        // 毎フレーム、時間経過でゲージを増やす
+        okawarigauge += Time.deltaTime / fillduration;
+        okawarigauge = Mathf.Clamp01(okawarigauge); // 0〜1の範囲に制限
 
+        ChangeOkawari(); // UI反映
+    }
+
+    /// <summary>
+    /// お代わりゲージを時間経過でマックスにする
+    /// </summary>
+    public void FillOkawariOverTime()
+    {
+        if (_fillCoroutine != null)
+        {
+            StopCoroutine(_fillCoroutine);
+        }
+        _fillCoroutine = StartCoroutine(FillOkawariRoutine());
+    }
+
+    private IEnumerator FillOkawariRoutine()
+    {
+        float startValue = okawarigauge;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < fillduration)
+        {
+            elapsedTime += Time.deltaTime;
+            okawarigauge = Mathf.Lerp(startValue, 1f, elapsedTime / fillduration);
+            ChangeOkawari();
+            yield return null;
+        }
+
+        okawarigauge = 1f;
+        ChangeOkawari();
+    }
     public void TakeOkawari()
     {
         okawarigauge += 0.1f;
