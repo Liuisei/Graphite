@@ -3,18 +3,18 @@ using UnityEngine;
 
 public class okawriiITem : MonoBehaviour
 {
-    private okawari _okawari;
+    protected okawari _okawari;
 
-    private void Start()
+   protected void Start()
     {
         _okawari = FindAnyObjectByType<okawari>();
     }
 
-    private void OnCollisionEnter(Collision other)
+    protected virtual void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            _okawari.gauge += 0.5f;
+            _okawari.okawarigauge += 0.5f;
             _okawari.ChangeOkawari();
             Destroy(this.gameObject);
         }
