@@ -13,4 +13,13 @@ public class Game : MonoBehaviour
     {
         
     }
+
+
+    enum GameState
+    {
+        pripare,
+        fase1,
+        end,
+        gameOver,
+    }
 }
