@@ -1,4 +1,4 @@
-﻿Shader "Iska/URP/OceanSimple"
+Shader "Iska/URP/OceanSimple"
 {
     Properties
     {
@@ -23,11 +23,15 @@
 
     SubShader
     {
-        Tags { "RenderType"="Transparent" "Queue"="Transparent" "RenderPipeline"="UniversalRenderPipeline" }
+        // Tags { "RenderType"="Transparent" "Queue"="Transparent" "RenderPipeline"="UniversalRenderPipeline" }
+        Tags { "RenderType"="Opaque" "Queue"="Geometry" }
         LOD 100
         Blend SrcAlpha OneMinusSrcAlpha
-        ZWrite Off
+        // Blend One Zero    ← 完全不透明（必要なら AlphaBlend に戻してもOK）
+        ZWrite on
         Cull Back
+
+
 
         Pass
         {
