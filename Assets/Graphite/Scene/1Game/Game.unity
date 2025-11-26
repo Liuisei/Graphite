@@ -545,26 +545,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 102524891}
   m_LocalEulerAnglesHint: {x: 0, y: 90.072, z: 0}
---- !u!1 &469978869 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8118383380568634958, guid: 3e6542c3a9b6f92459d0ca87fe0b9c70, type: 3}
-  m_PrefabInstance: {fileID: 8162481064402104334}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &469978871
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 469978869}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c514f7450c684a47a103a4fd6c89fb7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  accel: 10
-  maxSpeed: 5
-  drag: 2
 --- !u!1 &519970787
 GameObject:
   m_ObjectHideFlags: 0
@@ -1545,7 +1525,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3139064005847575848, guid: 3e6542c3a9b6f92459d0ca87fe0b9c70, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -12.77
       objectReference: {fileID: 0}
     - target: {fileID: 3139064005847575848, guid: 3e6542c3a9b6f92459d0ca87fe0b9c70, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1553,7 +1533,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3139064005847575848, guid: 3e6542c3a9b6f92459d0ca87fe0b9c70, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 6.87
       objectReference: {fileID: 0}
     - target: {fileID: 3139064005847575848, guid: 3e6542c3a9b6f92459d0ca87fe0b9c70, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1587,21 +1567,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 8503005116657518791, guid: 3e6542c3a9b6f92459d0ca87fe0b9c70, type: 3}
-      propertyPath: m_Height
-      value: 6.21
-      objectReference: {fileID: 0}
-    - target: {fileID: 8503005116657518791, guid: 3e6542c3a9b6f92459d0ca87fe0b9c70, type: 3}
-      propertyPath: m_Radius
-      value: 1.62
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8118383380568634958, guid: 3e6542c3a9b6f92459d0ca87fe0b9c70, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 469978871}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3e6542c3a9b6f92459d0ca87fe0b9c70, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
