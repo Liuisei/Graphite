@@ -36,6 +36,7 @@ public class PlayerTest1 : MonoBehaviour
     private Vector2 moveInput;
     public bool IsMove = true;
     private bool iscopying = false;
+    private float scale = 30f;
     [SerializeField] private PlayerInput playerInput;
 
     private void Awake()
@@ -44,6 +45,12 @@ public class PlayerTest1 : MonoBehaviour
         _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         LifeGauge.SetLifeGauge(hp);
         _okawari = FindAnyObjectByType<okawari>();
+        bulletPrefab1.transform.localScale = new Vector3(scale, scale, scale);
+
+        bulletPrefab2.transform.localScale = new Vector3(scale, scale, scale);
+        beamPrefab.transform.localScale = new Vector3(scale, scale, scale);
+        shieldPrefab.transform.localScale = new Vector3(scale, scale, scale);
+        copyPrefab.transform.localScale = new Vector3(scale, scale, scale);
     }
 
     private void OnEnable()

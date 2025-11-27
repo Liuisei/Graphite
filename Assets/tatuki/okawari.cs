@@ -29,7 +29,7 @@ public class okawari : MonoBehaviour
         ChangeOkawari(); // UI反映
     }
 
-   
+
 
     public void TakeOkawari()
     {
